@@ -36,6 +36,7 @@ Never optimize for temporary solutions if a cleaner architecture exists.
 When multiple implementations are possible, choose the solution with better long-term maintainability.
 
 The project follows professional software engineering practices instead of prototype development.
+---
 
 # 2. General Principles
 
@@ -156,3 +157,141 @@ Never infer citation statistics without reliable sources.
 Always preserve original scientific information.
 
 Translation should never change the scientific meaning.
+---
+
+# 3. Project Structure
+
+The project must always follow the directory layout below.
+
+```
+paper-assistant/
+
+├── config/
+├── docs/
+├── logs/
+├── reports/
+├── src/
+├── tests/
+├── scripts/
+├── cache/
+├── data/
+└── README.md
+```
+
+---
+
+## src/
+
+All application source code belongs here.
+
+The src directory should be organized by feature rather than file type.
+
+Preferred layout:
+
+```
+src/
+
+    arxiv/
+    inspire/
+    ranking/
+    ai/
+    translation/
+    reports/
+    email/
+    scheduler/
+    config/
+    database/
+    models/
+    utils/
+```
+
+---
+
+## config/
+
+Contains configuration files only.
+
+Examples:
+
+- config.yaml
+- email.yaml
+- ai.yaml
+- ranking.yaml
+
+No Python business logic belongs here.
+
+---
+
+## reports/
+
+Generated reports.
+
+Examples:
+
+- HTML
+- PDF
+
+Old reports should be archived automatically.
+
+---
+
+## logs/
+
+Application logs.
+
+Different modules should have independent log files.
+
+Never delete logs automatically unless configured.
+
+---
+
+## cache/
+
+Temporary cached data.
+
+Cache may be safely removed.
+
+Never store important data here.
+
+---
+
+## data/
+
+Persistent project data.
+
+Examples:
+
+- paper history
+- author cache
+- ranking cache
+
+---
+
+## tests/
+
+Mirror the structure of src.
+
+Example:
+
+src/arxiv/
+
+↓
+
+tests/arxiv/
+
+Every public module should have corresponding tests.
+
+---
+
+## scripts/
+
+Contains standalone utility scripts.
+
+Examples:
+
+- initialize_database.py
+- migrate_cache.py
+- clean_reports.py
+
+Business logic should remain inside src.
+```
