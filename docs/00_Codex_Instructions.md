@@ -936,3 +936,197 @@ Whenever public behavior changes, the corresponding documentation must also be u
 Documentation should never lag behind the implementation.
 
 ---
+# 7. Error Handling and Recovery
+
+Errors are expected in long-running systems.
+
+Paper Assistant is designed to execute automatically every day without manual supervision.
+
+Therefore, failures must be isolated whenever possible.
+
+The system should continue processing unaffected tasks even if individual components fail.
+
+---
+
+## 7.1 Never Ignore Exceptions
+
+Exceptions must never be silently ignored.
+
+Never write:
+
+```python
+try:
+    ...
+except Exception:
+    pass
+```
+
+Every exception must either:
+
+- be handled,
+- be logged,
+- or be re-raised with additional context.
+
+---
+
+## 7.2 Catch Specific Exceptions
+
+Always catch the most specific exception possible.
+
+Good:
+
+```python
+except httpx.TimeoutException:
+```
+
+Avoid:
+
+```python
+except Exception:
+```
+
+unless acting as the final safety boundary.
+
+---
+
+## 7.3 Preserve Context
+
+Whenever raising a new exception, preserve the original exception.
+
+Example:
+
+```python
+raise TranslationError(
+    "Translation service failed."
+) from exc
+```
+
+---
+
+## 7.4 Retry Strategy
+
+Transient failures should automatically retry.
+
+Applicable scenarios include:
+
+- Network timeout
+- Temporary API failure
+- HTTP 429
+- HTTP 500
+- DNS lookup failure
+
+Retry strategy should use exponential backoff.
+
+Retry count must be configurable.
+
+---
+
+## 7.5 Permanent Failures
+
+Permanent failures should not retry indefinitely.
+
+Examples:
+
+- Invalid API key
+- Authentication failure
+- Invalid configuration
+- Missing required file
+
+These failures should stop the affected module immediately.
+
+---
+
+## 7.6 Module Isolation
+
+Failure of one module must not terminate the entire daily workflow.
+
+Example:
+
+If translation fails:
+
+- AI summary should continue.
+- HTML report should still be generated.
+- Email should still be delivered.
+
+Unavailable sections should be marked accordingly.
+
+---
+
+## 7.7 Partial Results
+
+Whenever possible, produce partial results instead of failing completely.
+
+Example:
+
+If one paper cannot be analyzed,
+
+continue processing all remaining papers.
+
+---
+
+## 7.8 Timeout Management
+
+Every network request must define an explicit timeout.
+
+Never rely on library default values.
+
+Timeout values must be configurable.
+
+---
+
+## 7.9 User-Friendly Errors
+
+Error messages should clearly describe:
+
+- What failed
+- Why it failed
+- Possible solutions
+
+Avoid exposing internal stack traces to end users.
+
+Detailed stack traces belong in log files only.
+
+---
+
+## 7.10 Daily Report Reliability
+
+Failure of one paper must never prevent the daily report from being generated.
+
+The report should clearly indicate:
+
+- successful analyses
+- failed analyses
+- skipped papers
+
+Users should always receive a complete report of the day's execution.
+
+---
+
+## 7.11 Graceful Shutdown
+
+Unexpected failures should trigger a graceful shutdown.
+
+The application should:
+
+- save pending data
+- flush log files
+- close database connections
+- close network sessions
+
+before exiting.
+
+---
+
+## 7.12 Decision Rules for Codex
+
+Whenever multiple error-handling strategies are possible, always prefer the one that:
+
+1. Preserves user data.
+2. Preserves scientific data.
+3. Continues processing unaffected tasks.
+4. Produces useful logs.
+5. Allows later recovery.
+
+Never choose an implementation that sacrifices reliability for shorter code.
+
+---
