@@ -294,4 +294,645 @@ Examples:
 - clean_reports.py
 
 Business logic should remain inside src.
+
+---
+
+# 4. Python Coding Standards
+
+The project uses **Python 3.13 or newer**.
+
+All generated code must follow modern Python best practices.
+
+---
+
+## 4.1 Type Hints
+
+Every function, method, and variable should use type annotations whenever practical.
+
+Example:
+
+```python
+def load_papers(category: str) -> list[Paper]:
+    ...
 ```
+
+Avoid untyped public interfaces.
+
+---
+
+## 4.2 Docstrings
+
+Every public class, function, and module must include Google-style docstrings.
+
+Example:
+
+```python
+def translate(title: str) -> str:
+    """
+    Translate a paper title into Simplified Chinese.
+
+    Args:
+        title: Original English title.
+
+    Returns:
+        Translated title.
+    """
+```
+
+---
+
+## 4.3 Imports
+
+Imports must be grouped in the following order:
+
+1. Python standard library
+2. Third-party packages
+3. Local project modules
+
+Separate groups with one blank line.
+
+Avoid wildcard imports.
+
+Never use:
+
+```python
+from xxx import *
+```
+
+---
+
+## 4.4 pathlib
+
+Always use pathlib instead of os.path.
+
+Preferred:
+
+```python
+from pathlib import Path
+```
+
+Avoid:
+
+```python
+import os
+```
+
+for file path manipulation.
+
+---
+
+## 4.5 Constants
+
+Magic numbers are forbidden.
+
+Constants should be placed in configuration files or dedicated constant modules.
+
+Bad:
+
+```python
+score += 500
+```
+
+Good:
+
+```python
+score += HIGH_CITATION_SCORE
+```
+
+---
+
+## 4.6 Data Classes
+
+Use dataclasses for immutable data models whenever appropriate.
+
+Avoid dictionaries for structured data.
+
+---
+
+## 4.7 Enumerations
+
+Use Enum for fixed choices.
+
+Examples:
+
+- arXiv categories
+- Report types
+- Language types
+- AI providers
+
+---
+
+## 4.8 Exceptions
+
+Never silently ignore exceptions.
+
+Avoid:
+
+```python
+except:
+    pass
+```
+
+Always catch specific exception types.
+
+---
+
+## 4.9 Logging
+
+Never use print() for application logging.
+
+Use the project's logging system.
+
+print() is acceptable only for command-line helper scripts or debugging during development.
+
+---
+
+## 4.10 Function Length
+
+Functions should generally remain below 50 lines.
+
+If longer, consider splitting into smaller functions.
+
+---
+
+## 4.11 Class Length
+
+Classes should usually remain below 300 lines.
+
+If significantly larger, redesign the architecture.
+
+---
+
+## 4.12 File Length
+
+Python source files should usually remain below 500 lines.
+
+Very large files indicate poor modularization.
+
+---
+
+## 4.13 Async Programming
+
+Network operations should use asynchronous programming when beneficial.
+
+CPU-bound tasks should remain synchronous unless profiling demonstrates a clear need.
+
+Do not introduce async complexity unnecessarily.
+
+---
+
+## 4.14 Formatting
+
+Code should follow PEP 8.
+
+Formatting should be compatible with Ruff and Black.
+
+Do not manually format code in ways that conflict with automated tools.
+
+---
+
+## 4.15 Comments
+
+Comments should explain **why**, not **what**.
+
+Bad:
+
+```python
+# Increment counter
+counter += 1
+```
+
+Good:
+
+```python
+# Retry count prevents infinite API request loops.
+counter += 1
+```
+
+---
+
+## 4.16 Public Interfaces
+
+Public APIs should remain stable.
+
+Avoid changing function signatures unless absolutely necessary.
+
+Backward compatibility should be considered whenever possible.
+---
+
+---
+
+# 5. Naming Conventions
+
+Consistent naming is essential for long-term maintainability.
+
+Every generated file, class, function, variable, configuration file, and report must follow the conventions below.
+
+## 5.1 File Names
+
+Python source files must use lowercase snake_case.
+
+Good examples:
+
+- arxiv_fetcher.py
+- inspire_client.py
+- paper_ranker.py
+- report_generator.py
+- email_sender.py
+
+Avoid:
+
+- PaperFetcher.py
+- fetchPaper.py
+- paper-final.py
+- helper.py
+- utils2.py
+
+File names should clearly describe their purpose.
+
+---
+
+## 5.2 Directory Names
+
+Directory names must use lowercase.
+
+Examples:
+
+- arxiv
+- inspire
+- translation
+- reports
+- scheduler
+- database
+
+Avoid unnecessary abbreviations.
+
+---
+
+## 5.3 Class Names
+
+Class names must use PascalCase.
+
+Examples:
+
+- ArxivClient
+- InspireAnalyzer
+- PaperRanker
+- ReportGenerator
+- EmailSender
+
+Class names should represent nouns.
+
+---
+
+## 5.4 Function Names
+
+Function names must use snake_case.
+
+Examples:
+
+- fetch_recent_papers()
+- translate_abstract()
+- calculate_author_score()
+- generate_html_report()
+
+Function names should start with meaningful verbs.
+
+---
+
+## 5.5 Variable Names
+
+Variables should clearly describe their purpose.
+
+Good examples:
+
+- paper
+- papers
+- author
+- author_profile
+- citation_count
+- report_path
+
+Avoid meaningless names such as:
+
+- data
+- tmp
+- obj
+- value
+- result2
+
+unless their scope is extremely limited.
+
+---
+
+## 5.6 Constants
+
+Constants must use uppercase with underscores.
+
+Examples:
+
+- MAX_RETRY_COUNT
+- DEFAULT_TIMEOUT
+- HIGH_CITATION_THRESHOLD
+- REPORT_OUTPUT_DIRECTORY
+
+---
+
+## 5.7 Configuration Files
+
+Configuration files should use descriptive names.
+
+Examples:
+
+- config.yaml
+- email.yaml
+- ai.yaml
+- ranking.yaml
+- logging.yaml
+
+Avoid generic names such as:
+
+- settings.yaml
+- config2.yaml
+- new_config.yaml
+
+---
+
+## 5.8 Test Files
+
+Every test file should correspond to one production module.
+
+Examples:
+
+- test_arxiv_fetcher.py
+- test_inspire_client.py
+- test_report_generator.py
+
+---
+
+## 5.9 Report Names
+
+Generated reports should contain the generation date.
+
+Examples:
+
+- report_2026-07-06.html
+- report_2026-07-06.pdf
+
+Avoid ambiguous names such as:
+
+- report.html
+- final_report.html
+
+---
+
+## 5.10 Log Files
+
+Log files should include the module name.
+
+Examples:
+
+- arxiv.log
+- inspire.log
+- translation.log
+- email.log
+
+Separate logs improve troubleshooting.
+
+---
+
+## 5.11 Cache Files
+
+Cache files should clearly identify their purpose.
+
+Examples:
+
+- author_cache.db
+- paper_cache.json
+- translation_cache.db
+
+Temporary cache files should be removable without affecting project data.
+
+---
+
+## 5.12 Database Tables
+
+Database tables should use plural nouns.
+
+Examples:
+
+- papers
+- authors
+- reports
+- translations
+- rankings
+
+Avoid singular table names.
+
+---
+
+## 5.13 HTML IDs and CSS Classes
+
+Use lowercase with hyphens.
+
+Examples:
+
+- paper-title
+- author-list
+- summary-box
+
+Avoid camelCase.
+
+---
+
+## 5.14 Email Subjects
+
+Email subjects should remain consistent.
+
+Recommended format:
+
+Paper Assistant Daily Report | YYYY-MM-DD
+
+This format improves email searching and automatic filtering.
+
+---
+
+## 5.15 AI Prompt Files
+
+Prompt files should clearly indicate their purpose.
+
+Examples:
+
+- summary_prompt.md
+- translation_prompt.md
+- ranking_prompt.md
+
+Avoid storing prompts directly inside Python source code whenever possible.
+
+---
+
+# 6. Documentation Standards
+
+High-quality documentation is mandatory for every generated component.
+
+Documentation should explain the purpose, usage, assumptions, and limitations of the code.
+
+Documentation must always remain synchronized with the implementation.
+
+---
+
+## 6.1 Module Documentation
+
+Every Python module should begin with a module-level docstring.
+
+The module docstring should briefly describe:
+
+- Purpose
+- Responsibilities
+- Major classes
+- Major functions
+
+---
+
+## 6.2 Function Documentation
+
+Every public function must include a Google-style docstring.
+
+Each docstring should describe:
+
+- Purpose
+- Args
+- Returns
+- Raises (if applicable)
+
+Example:
+
+```python
+def fetch_recent_papers(category: str) -> list[Paper]:
+    """
+    Fetch newly submitted papers from arXiv.
+
+    Args:
+        category: arXiv category.
+
+    Returns:
+        A list of Paper objects.
+
+    Raises:
+        NetworkError:
+            If the request repeatedly fails.
+    """
+```
+
+---
+
+## 6.3 Class Documentation
+
+Every public class should include a class docstring describing:
+
+- Purpose
+- Main responsibilities
+- Important attributes
+- Usage notes
+
+---
+
+## 6.4 Inline Comments
+
+Comments should explain **why**, not **what**.
+
+Avoid obvious comments.
+
+Bad:
+
+```python
+counter += 1
+```
+
+Good:
+
+```python
+# Prevent infinite retry loops.
+counter += 1
+```
+
+---
+
+## 6.5 TODO Comments
+
+Temporary work should use standardized TODO comments.
+
+Example:
+
+```python
+# TODO: Support additional arXiv categories.
+```
+
+Avoid vague comments such as:
+
+```python
+# Fix later
+```
+
+---
+
+## 6.6 README Files
+
+Each major module may include a README.md when necessary.
+
+The README should describe:
+
+- Purpose
+- Architecture
+- Usage
+- Configuration
+- Limitations
+
+---
+
+## 6.7 Configuration Documentation
+
+Every configuration option should be documented.
+
+Each option should include:
+
+- Description
+- Default value
+- Allowed values
+
+---
+
+## 6.8 API Documentation
+
+Every external API wrapper should document:
+
+- API endpoint
+- Authentication
+- Request format
+- Response format
+- Rate limits
+- Retry strategy
+
+---
+
+## 6.9 AI Prompt Documentation
+
+Prompt templates should be stored as Markdown files.
+
+Each prompt should document:
+
+- Purpose
+- Expected input
+- Expected output
+- Version
+- Supported models
+
+---
+
+## 6.10 Change Documentation
+
+Whenever public behavior changes, the corresponding documentation must also be updated.
+
+Documentation should never lag behind the implementation.
+
+---
