@@ -36,3 +36,123 @@ Never optimize for temporary solutions if a cleaner architecture exists.
 When multiple implementations are possible, choose the solution with better long-term maintainability.
 
 The project follows professional software engineering practices instead of prototype development.
+
+# 2. General Principles
+
+The following principles apply to every source file generated for this project.
+
+## 2.1 Code Quality
+
+Always generate production-quality code.
+
+Never generate prototype code unless explicitly requested.
+
+Code should prioritize:
+
+- correctness
+- readability
+- maintainability
+- extensibility
+
+over implementation speed.
+
+---
+
+## 2.2 Single Responsibility Principle
+
+Each module should have one clear responsibility.
+
+Each class should solve one problem.
+
+Each function should perform one task.
+
+If a function becomes too large or handles multiple responsibilities, split it into smaller functions.
+
+---
+
+## 2.3 Avoid Code Duplication
+
+Avoid duplicated logic.
+
+If the same logic appears more than once, extract it into reusable functions or utility modules.
+
+Follow the DRY (Don't Repeat Yourself) principle.
+
+---
+
+## 2.4 Modular Design
+
+Every major feature should be implemented as an independent module.
+
+Modules should communicate through clear interfaces.
+
+Avoid unnecessary coupling between modules.
+
+---
+
+## 2.5 Configuration Driven
+
+Never hardcode:
+
+- API Keys
+- URLs
+- Email addresses
+- File paths
+- Model names
+- Threshold values
+
+All configurable values must be stored in configuration files.
+
+---
+
+## 2.6 Readability
+
+Prefer readable code over clever code.
+
+Variable names should clearly describe their purpose.
+
+Avoid abbreviations unless they are standard scientific terminology.
+
+---
+
+## 2.7 Simplicity
+
+Prefer simple solutions.
+
+Avoid unnecessary abstraction.
+
+Avoid premature optimization.
+
+---
+
+## 2.8 Explicit Is Better Than Implicit
+
+Write code that clearly expresses its intent.
+
+Avoid hidden side effects.
+
+Avoid magic numbers.
+
+---
+
+## 2.9 Future Expansion
+
+Every module should be designed with future extensions in mind.
+
+Assume that new arXiv categories, AI models, report formats, and external services will be added in future versions.
+
+Do not design modules that only solve today's requirements.
+
+---
+
+## 2.10 Scientific Reliability
+
+Scientific correctness is more important than implementation convenience.
+
+Never fabricate data.
+
+Never infer citation statistics without reliable sources.
+
+Always preserve original scientific information.
+
+Translation should never change the scientific meaning.
