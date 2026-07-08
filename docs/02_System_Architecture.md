@@ -1445,3 +1445,261 @@ Dependency injection shall improve:
 The composition root shall be responsible for constructing the application object graph.
 
 ---
+
+## 5. Data Flow
+
+### 5.1 Purpose
+
+This chapter describes how data flows through the Paper Assistant system.
+
+The objective is to ensure that data transformation remains explicit, deterministic, and traceable throughout the processing pipeline.
+
+Every stage shall consume well-defined domain objects and produce new structured domain objects.
+
+---
+
+### 5.2 Design Objectives
+
+The data flow architecture shall provide:
+
+- explicit transformations
+- immutable processing stages
+- reproducible execution
+- traceable data lineage
+- reusable intermediate results
+
+Each processing stage shall have clearly defined inputs and outputs.
+
+---
+
+### 5.3 End-to-End Pipeline
+
+The complete processing pipeline consists of the following stages:
+
+1. Paper Retrieval
+2. Metadata Normalization
+3. Author Analysis
+4. Citation Aggregation
+5. Feature Extraction
+6. Ranking
+7. Candidate Selection
+8. AI Analysis
+9. Translation
+10. Report Generation
+11. Rendering
+12. Notification
+
+Each stage shall execute independently and produce structured output.
+
+---
+
+### 5.4 Overall Data Flow
+
+```mermaid
+flowchart LR
+
+A[arXiv] --> B[Paper Retrieval]
+
+B --> C[Paper]
+
+C --> D[Metadata Processor]
+
+D --> E[PaperMetadata]
+
+E --> F[Author Analyzer]
+
+F --> G[AuthorProfile]
+
+G --> H[Citation Aggregator]
+
+H --> I[PaperFeatures]
+
+I --> J[Ranking Engine]
+
+J --> K[Ranked Papers]
+
+K --> L[Candidate Selector]
+
+L --> M[Analysis Engine]
+
+M --> N[Analysis Result]
+
+N --> O[Translation Engine]
+
+O --> P[Translated Result]
+
+P --> Q[Report Generator]
+
+Q --> R[Report Model]
+
+R --> S[Renderer]
+
+S --> T[HTML / PDF / Markdown]
+
+T --> U[Notification]
+```
+
+---
+
+### 5.5 Transformation Principles
+
+Each stage shall transform input objects into new output objects.
+
+Components shall avoid modifying upstream objects whenever practical.
+
+Transformation stages shall remain:
+
+- deterministic
+- explicit
+- reproducible
+- independently testable
+
+Data shall move forward through the pipeline.
+
+Backward modification of previous stages is prohibited.
+
+---
+
+### 5.6 Immutable Domain Objects
+
+Domain objects should be treated as immutable whenever practical.
+
+Processing stages should create new objects instead of modifying existing ones.
+
+Immutable objects improve:
+
+- reproducibility
+- debugging
+- testing
+- concurrent execution
+
+Mutable state shall remain localized.
+
+---
+
+### 5.7 Data Lifecycle
+
+Each domain object shall have a clearly defined lifecycle.
+
+Typical lifecycle:
+
+Retrieved
+
+↓
+
+Normalized
+
+↓
+
+Analyzed
+
+↓
+
+Ranked
+
+↓
+
+Selected
+
+↓
+
+AI Processed
+
+↓
+
+Translated
+
+↓
+
+Reported
+
+↓
+
+Archived
+
+No object shall bypass required processing stages.
+
+---
+
+### 5.8 Error Propagation
+
+Recoverable failures shall be represented explicitly.
+
+Failed objects may continue through the pipeline with partial information when appropriate.
+
+Each processing stage shall report:
+
+- success
+- warning
+- failure
+
+Errors shall remain localized whenever possible.
+
+---
+
+### 5.9 Metadata Tracking
+
+Every major domain object shall record processing metadata.
+
+Metadata may include:
+
+- creation timestamp
+- processing stage
+- software version
+- configuration version
+- provider information
+
+Metadata tracking improves traceability and reproducibility.
+
+---
+
+### 5.10 Data Contracts
+
+Each component shall publish a stable contract describing:
+
+- accepted input types
+- produced output types
+- optional fields
+- required fields
+- validation rules
+
+Data contracts shall remain independent of implementation details.
+
+---
+
+### 5.11 Domain Model Evolution
+
+Data shall become progressively richer as it moves through the pipeline.
+
+Example evolution:
+
+Paper
+
+↓
+
+PaperMetadata
+
+↓
+
+AuthorProfile
+
+↓
+
+PaperFeatures
+
+↓
+
+AnalysisResult
+
+↓
+
+TranslatedResult
+
+↓
+
+ReportModel
+
+Each transformation shall add information without losing previously validated data.
+
+---
+
