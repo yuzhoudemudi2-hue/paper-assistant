@@ -1130,3 +1130,233 @@ Whenever multiple error-handling strategies are possible, always prefer the one 
 Never choose an implementation that sacrifices reliability for shorter code.
 
 ---
+# 8. Logging Standards
+
+Logging is mandatory throughout the project.
+
+Every important operation should generate meaningful logs.
+
+Logs should support debugging, monitoring, auditing, and long-term maintenance.
+
+Never rely on print() for application logging.
+
+---
+
+## 8.1 Logging Framework
+
+Use Python's standard logging module.
+
+All modules should use a project-wide logging configuration.
+
+Avoid creating independent logging systems.
+
+---
+
+## 8.2 Log Levels
+
+Use log levels consistently.
+
+DEBUG
+
+Detailed diagnostic information.
+
+INFO
+
+Normal application workflow.
+
+WARNING
+
+Unexpected situations that do not interrupt execution.
+
+ERROR
+
+Failures affecting one operation.
+
+CRITICAL
+
+Failures preventing the application from continuing.
+
+Never misuse log levels.
+
+---
+
+## 8.3 Required Logging Events
+
+The following events must always be logged:
+
+- Application startup
+- Application shutdown
+- Daily task start
+- Daily task completion
+- arXiv requests
+- INSPIRE requests
+- AI requests
+- Translation requests
+- Email delivery
+- Configuration loading
+- Retry attempts
+- Exceptions
+
+---
+
+## 8.4 Structured Messages
+
+Log messages should clearly describe:
+
+- Operation
+- Target
+- Result
+
+Example:
+
+```
+Fetched 28 papers from arXiv category gr-qc.
+```
+
+Avoid vague messages such as:
+
+```
+Success
+```
+
+or
+
+```
+Done
+```
+
+---
+
+## 8.5 Exception Logging
+
+Every unexpected exception must be logged.
+
+Logs should include:
+
+- Exception type
+- Message
+- Stack trace
+
+Do not expose stack traces to end users.
+
+---
+
+## 8.6 Log Files
+
+Different modules should have separate log files when appropriate.
+
+Examples:
+
+- arxiv.log
+- inspire.log
+- ai.log
+- translation.log
+- email.log
+
+A global application log should also be maintained.
+
+---
+
+## 8.7 Log Rotation
+
+Log files should support automatic rotation.
+
+Old logs should be archived instead of overwritten.
+
+Retention policy should be configurable.
+
+---
+
+## 8.8 Sensitive Information
+
+Never write sensitive information into logs.
+
+Examples:
+
+- API keys
+- Passwords
+- Authentication tokens
+- Email credentials
+
+Sensitive values should always be masked.
+
+---
+
+## 8.9 Performance Logging
+
+Long-running operations should record execution time.
+
+Examples:
+
+- arXiv download
+- INSPIRE search
+- AI analysis
+- Translation
+- Report generation
+
+Performance logs support future optimization.
+
+---
+
+## 8.10 AI Request Logging
+
+Every AI request should record:
+
+- Provider
+- Model
+- Prompt version
+- Request time
+- Response time
+- Token usage (if available)
+
+Do not log confidential prompt contents unless debugging is explicitly enabled.
+
+---
+
+## 8.11 API Request Logging
+
+External API calls should record:
+
+- Service name
+- Endpoint
+- Response status
+- Retry count
+- Request duration
+
+Avoid excessive logging of response bodies.
+
+---
+
+## 8.12 Daily Summary
+
+At the end of every daily execution, log a summary including:
+
+- Total papers processed
+- Successfully analyzed papers
+- Failed analyses
+- Emails sent
+- Total execution time
+
+This summary should make it possible to understand the entire day's execution from a single log entry.
+
+---
+
+## 8.13 Decision Rules for Codex
+
+Whenever deciding whether an operation should be logged:
+
+If the information could help diagnose a future problem,
+
+log it.
+
+If the information is sensitive,
+
+mask it.
+
+If the information is neither useful nor safe,
+
+do not log it.
+
+Logging should improve maintainability without compromising security.
+
+---
