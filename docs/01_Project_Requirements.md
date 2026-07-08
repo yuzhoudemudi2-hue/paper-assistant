@@ -2671,3 +2671,1604 @@ The scheduler shall expose diagnostic information including:
 Diagnostic information shall assist operational monitoring.
 
 ---
+# 4. Non-Functional Requirements
+
+## 4.1 Performance
+
+### NFR-001 Performance Objective
+
+The system shall provide sufficient performance for daily automated literature monitoring.
+
+Performance optimization shall not compromise correctness or reproducibility.
+
+---
+
+### NFR-002 Daily Execution Time
+
+Under normal operating conditions,
+
+the complete processing pipeline should finish within a reasonable execution time.
+
+Performance targets shall be configurable and may vary according to workload.
+
+---
+
+### NFR-003 Incremental Processing
+
+Previously processed papers should not be processed again unless explicitly requested.
+
+Incremental processing shall reduce unnecessary computation.
+
+---
+
+### NFR-004 Parallel Processing
+
+Independent processing tasks may execute concurrently whenever data dependencies permit.
+
+Parallel execution shall not affect deterministic behavior.
+
+---
+
+### NFR-005 External Request Efficiency
+
+The application should minimize unnecessary requests to external services through:
+
+- caching
+- batching
+- request reuse
+
+External service limits shall be respected.
+
+---
+
+### NFR-006 AI Resource Optimization
+
+AI requests should minimize unnecessary token usage.
+
+Reusable AI results should be obtained from cache whenever possible.
+
+---
+
+### NFR-007 Memory Usage
+
+The application shall maintain stable memory usage during normal execution.
+
+Temporary processing data shall be released after use whenever practical.
+
+---
+
+### NFR-008 Startup Time
+
+Application startup shall remain lightweight.
+
+Configuration loading and validation should complete before workflow execution begins.
+
+---
+
+### NFR-009 Report Generation Performance
+
+Report generation should not become a performance bottleneck.
+
+Large reports shall remain responsive during generation.
+
+---
+
+### NFR-010 Performance Monitoring
+
+Performance metrics shall be collected for major processing stages.
+
+Examples include:
+
+- execution duration
+- API latency
+- AI processing time
+- report generation time
+
+Performance information shall support future optimization.
+
+---
+### NFR-011 Scalable Performance
+
+Performance degradation shall remain acceptable as the number of monitored papers increases.
+
+The architecture shall support future workload growth without major redesign.
+
+---
+
+### NFR-012 Deterministic Performance Measurement
+
+Performance measurements shall be collected using consistent methodologies.
+
+Reported performance statistics shall remain comparable across executions.
+
+---
+## 4.2 Reliability
+
+### NFR-013 Reliability Objective
+
+The system shall provide reliable daily operation under normal conditions.
+
+Individual component failures shall not unnecessarily terminate the overall processing pipeline.
+
+---
+
+### NFR-014 Fault Tolerance
+
+The application shall tolerate failures of individual subsystems whenever possible.
+
+Examples include:
+
+- external API failures
+- AI provider failures
+- translation failures
+- email delivery failures
+
+The system shall continue processing unaffected components.
+
+---
+
+### NFR-015 Graceful Degradation
+
+When optional functionality becomes unavailable,
+
+the system shall continue operating with reduced functionality rather than terminating execution.
+
+Reduced functionality shall be clearly indicated in reports and logs.
+
+---
+
+### NFR-016 Automatic Recovery
+
+Recoverable failures should be handled automatically whenever practical.
+
+Recovery mechanisms may include:
+
+- retry operations
+- cache fallback
+- alternative service providers
+
+---
+
+### NFR-017 Data Integrity
+
+The system shall preserve data integrity throughout the processing pipeline.
+
+Processing failures shall not corrupt stored metadata, cache contents, or generated reports.
+
+---
+
+### NFR-018 Execution Consistency
+
+Each execution shall maintain internal consistency.
+
+Partially processed data shall not be treated as completed results.
+
+---
+
+### NFR-019 Failure Isolation
+
+Failures in one subsystem shall not propagate unnecessarily to unrelated subsystems.
+
+Subsystem boundaries shall support independent recovery whenever practical.
+
+---
+
+### NFR-020 Report Availability
+
+Whenever possible,
+
+the system shall generate a usable report even if optional information is unavailable.
+
+Unavailable information shall be explicitly identified.
+
+---
+
+### NFR-021 Persistent Storage Reliability
+
+Stored reports, logs, and cache data shall remain recoverable after normal application shutdown.
+
+Unexpected interruptions should minimize data loss.
+
+---
+
+### NFR-022 Execution Recovery
+
+Following an abnormal termination,
+
+the system shall be capable of resuming normal scheduled execution without manual repair whenever practical.
+
+---
+
+### NFR-023 Reliability Monitoring
+
+The application shall record reliability-related metrics including:
+
+- execution success rate
+- retry frequency
+- subsystem failure frequency
+- recovery success rate
+
+Reliability metrics shall support long-term monitoring.
+
+---
+### NFR-024 External Service Independence
+
+Temporary unavailability of external services shall not permanently prevent future executions.
+
+Normal operation shall resume automatically when external services become available.
+
+---
+
+### NFR-025 Deterministic Recovery
+
+Given identical input data and configuration,
+
+recovered executions shall produce results equivalent to uninterrupted executions whenever practical.
+
+---
+
+### NFR-026 Historical Report Preservation
+
+Previously generated reports shall remain accessible regardless of failures occurring during later executions.
+
+Historical reports shall never be overwritten unintentionally.
+
+---
+
+### NFR-027 Operational Continuity
+
+The system shall be designed for long-term unattended operation.
+
+Routine execution should require minimal manual intervention.
+
+Operational interruptions shall be exceptional rather than expected.
+
+---
+## 4.3 Security
+
+### NFR-028 Security Objective
+
+The system shall protect sensitive information and external service credentials throughout the processing pipeline.
+
+Security measures shall minimize unnecessary exposure of confidential information.
+
+---
+
+### NFR-029 Credential Protection
+
+Sensitive credentials shall never be hardcoded in source code.
+
+Examples include:
+
+- API keys
+- SMTP passwords
+- authentication tokens
+
+Credentials should be supplied through environment variables or secure secret management mechanisms.
+
+---
+
+### NFR-030 Secure Communication
+
+Communication with external services shall use encrypted network connections whenever supported.
+
+Unencrypted transmission of sensitive information shall be avoided.
+
+---
+
+### NFR-031 Least Privilege
+
+Application components shall operate using the minimum privileges necessary.
+
+Administrative privileges shall not be required during normal operation.
+
+---
+
+### NFR-032 Sensitive Data Protection
+
+Sensitive information shall not appear in:
+
+- reports
+- logs
+- error messages
+- cache entries
+
+Sensitive values shall be masked whenever logging is required.
+
+---
+
+### NFR-033 Configuration Security
+
+Configuration files containing non-sensitive settings may be version controlled.
+
+Files containing sensitive information shall be excluded from version control.
+
+---
+
+### NFR-034 Dependency Security
+
+Third-party libraries shall be obtained from trusted sources.
+
+Dependencies should be updated regularly to address known security vulnerabilities.
+
+---
+
+### NFR-035 Input Validation
+
+External input shall be validated before processing.
+
+Examples include:
+
+- configuration files
+- API responses
+- user-provided parameters
+
+Invalid input shall not compromise application stability.
+
+---
+
+### NFR-036 File System Safety
+
+The application shall avoid modifying files outside its designated working directories.
+
+Generated files shall be written only to configured output locations.
+
+---
+
+### NFR-037 Secure Error Handling
+
+Security-sensitive failures shall avoid exposing implementation details.
+
+Error messages presented to users shall remain informative without revealing confidential information.
+
+---
+
+### NFR-038 Future Security Enhancements
+
+The security architecture shall support future enhancements including:
+
+- encrypted credential storage
+- digital signatures
+- access control
+- secure audit logging
+
+Future enhancements shall not require redesigning the application architecture.
+
+---
+### NFR-039 API Usage Protection
+
+The system shall minimize unnecessary requests to external AI providers and scientific databases.
+
+Efficient request management shall reduce both operational cost and unnecessary exposure of usage credentials.
+
+---
+
+### NFR-040 Report Privacy
+
+Generated reports shall contain only information intended for recipients.
+
+Internal diagnostic information shall never appear in user-facing reports unless explicitly enabled.
+
+---
+
+### NFR-041 Reproducible Dependency Management
+
+Dependency versions shall be recorded and managed consistently.
+
+Reproducible environments shall reduce both security risks and unexpected behavioral changes.
+
+---
+## 4.4 Maintainability
+
+### NFR-042 Maintainability Objective
+
+The system shall be designed for long-term maintainability.
+
+Future feature additions and modifications should require minimal changes to existing components.
+
+---
+
+### NFR-043 Modular Architecture
+
+The application shall follow a modular architecture.
+
+Each subsystem shall have clearly defined responsibilities.
+
+Module dependencies shall remain as simple as practical.
+
+---
+
+### NFR-044 Separation of Concerns
+
+Business logic, infrastructure, user interface, configuration, and external service integrations shall remain separated.
+
+Each module shall focus on a single primary responsibility.
+
+---
+
+### NFR-045 Code Readability
+
+Source code shall prioritize readability over unnecessary complexity.
+
+Meaningful names, consistent formatting, and clear structure shall be used throughout the project.
+
+---
+
+### NFR-046 Coding Standards
+
+The project shall adopt consistent coding standards.
+
+Coding conventions shall be documented and applied consistently across the codebase.
+
+---
+
+### NFR-047 Documentation
+
+Public modules, classes, and functions shall include appropriate documentation.
+
+Documentation shall explain:
+
+- purpose
+- inputs
+- outputs
+- important implementation notes
+
+---
+
+### NFR-048 Type Safety
+
+The application should use Python type hints whenever practical.
+
+Type annotations shall improve readability and reduce implementation errors.
+
+---
+
+### NFR-049 Testability
+
+Application components shall be designed to support automated testing.
+
+Business logic shall be testable independently from external services.
+
+---
+
+### NFR-050 Dependency Injection
+
+Components should receive external dependencies through well-defined interfaces whenever practical.
+
+Direct coupling between business logic and infrastructure shall be minimized.
+
+---
+
+### NFR-051 Stable Interfaces
+
+Public interfaces between major modules shall remain stable whenever practical.
+
+Internal implementation details may evolve without affecting dependent modules.
+
+---
+
+### NFR-052 Low Coupling
+
+Dependencies between modules shall remain minimal.
+
+Changes in one subsystem should not require widespread modifications elsewhere.
+
+---
+
+### NFR-053 High Cohesion
+
+Each module shall implement a clearly defined functional responsibility.
+
+Unrelated functionality shall not be combined within the same module.
+
+---
+
+### NFR-054 Version Control
+
+All source code, documentation, and configuration templates shall be maintained using version control.
+
+Commit history shall remain meaningful and traceable.
+
+---
+
+### NFR-055 Refactoring Support
+
+The architecture shall support incremental refactoring without requiring complete redesign.
+
+Refactoring shall preserve externally observable behavior whenever practical.
+
+---
+
+### NFR-056 Maintainability Monitoring
+
+Maintainability indicators may include:
+
+- module size
+- dependency complexity
+- documentation coverage
+- test coverage
+
+These indicators shall support long-term project quality.
+
+---
+### NFR-057 Plugin-Oriented Design
+
+Major functional areas should support extension through plugins or interchangeable implementations.
+
+Examples include:
+
+- AI providers
+- citation providers
+- translation providers
+- notification providers
+
+Plugin implementations shall share common interfaces.
+
+---
+
+### NFR-058 Configuration-Driven Behavior
+
+Application behavior should be controlled primarily through configuration.
+
+Feature additions should minimize the need for modifying existing business logic.
+
+---
+
+### NFR-059 Backward Compatibility
+
+Whenever practical,
+
+new functionality shall preserve compatibility with existing configuration files, cached data, and report formats.
+
+Breaking changes shall be documented explicitly.
+
+---
+
+### NFR-060 Incremental Evolution
+
+The architecture shall support incremental addition of new modules.
+
+Adding new functionality should require minimal modification to existing modules.
+
+---
+
+### NFR-061 AI-Assisted Development
+
+The project structure, documentation, and coding conventions shall remain suitable for AI-assisted software development.
+
+Documentation shall provide sufficient context for AI coding tools to implement new functionality consistently.
+
+---
+## 4.5 Scalability
+
+### NFR-062 Scalability Objective
+
+The system shall support long-term functional growth without requiring fundamental architectural redesign.
+
+Future expansion shall prioritize extension over modification.
+
+---
+
+### NFR-063 Modular Expansion
+
+New functional modules shall be integrated with minimal impact on existing components.
+
+Existing interfaces shall remain stable whenever practical.
+
+---
+
+### NFR-064 Additional Literature Sources
+
+The architecture shall support integration of additional literature retrieval providers.
+
+Examples include:
+
+- OpenAlex
+- Semantic Scholar
+- Crossref
+- INSPIRE Literature
+
+New providers shall implement common retrieval interfaces.
+
+---
+
+### NFR-065 Additional AI Providers
+
+The AI subsystem shall support future AI providers without modifying business logic.
+
+Provider-specific implementation details shall remain isolated.
+
+---
+
+### NFR-066 Additional Notification Channels
+
+The notification subsystem shall support additional delivery mechanisms.
+
+Examples include:
+
+- Slack
+- Microsoft Teams
+- Discord
+- Telegram
+- WeChat
+
+Additional channels shall integrate through common notification interfaces.
+
+---
+
+### NFR-067 Additional Report Formats
+
+The reporting subsystem shall support future report formats including:
+
+- PDF
+- Markdown
+- JSON
+- Web dashboard
+
+Report generation shall separate content creation from presentation.
+
+---
+
+### NFR-068 Additional Ranking Strategies
+
+New ranking algorithms shall be introduced without replacing existing implementations.
+
+Multiple ranking strategies shall coexist.
+
+---
+
+### NFR-069 Increasing Workload
+
+The architecture shall accommodate increasing numbers of:
+
+- monitored papers
+- authors
+- reports
+- cached objects
+
+Performance degradation shall remain acceptable.
+
+---
+
+### NFR-070 Future Configuration Expansion
+
+Configuration files shall support additional options without requiring incompatible structural changes.
+
+Configuration evolution shall preserve readability.
+
+---
+
+### NFR-071 Interface Stability
+
+Well-defined interfaces shall isolate subsystem implementations.
+
+Replacing one implementation shall not require changes in dependent modules.
+
+---
+
+### NFR-072 Extensible Data Models
+
+Core data models shall allow future fields to be added without breaking existing functionality.
+
+Optional metadata shall be supported whenever practical.
+
+---
+
+### NFR-073 Backward-Compatible Growth
+
+Future system evolution should preserve compatibility with:
+
+- existing reports
+- cached data
+- configuration files
+- execution logs
+
+Breaking changes shall be explicitly documented.
+
+---
+### NFR-074 Multi-Profile Support
+
+The architecture shall support multiple independent research profiles.
+
+Each profile may define:
+
+- monitored categories
+- ranking strategy
+- AI configuration
+- translation preferences
+- notification settings
+
+Profiles shall operate independently.
+
+---
+
+### NFR-075 Multi-User Readiness
+
+Although the initial release targets a single user,
+
+the architecture should not prevent future multi-user support.
+
+User-specific configuration shall remain isolated.
+
+---
+
+### NFR-076 Plugin Ecosystem
+
+The application shall support future third-party extensions through documented plugin interfaces.
+
+Plugins shall not require modification of the application core.
+
+---
+
+### NFR-077 Cloud Readiness
+
+The architecture shall remain suitable for future deployment in cloud environments.
+
+Deployment location shall not significantly affect application behavior.
+
+---
+## 4.6 Portability
+
+### NFR-078 Portability Objective
+
+The application shall operate consistently across supported environments.
+
+Platform-specific behavior shall be minimized whenever practical.
+
+---
+
+### NFR-079 Operating System Support
+
+The application shall support:
+
+- Windows
+- Linux
+
+Future operating systems may be supported without major architectural changes.
+
+---
+
+### NFR-080 Python Compatibility
+
+The application shall support officially supported Python versions defined by the project.
+
+Minimum and recommended Python versions shall be documented.
+
+---
+
+### NFR-081 Platform Independence
+
+Business logic shall remain independent of operating-system-specific functionality.
+
+Platform-specific implementation shall be isolated whenever practical.
+
+---
+
+### NFR-082 File Path Compatibility
+
+The application shall use platform-independent path handling.
+
+Path separators and file locations shall not be hardcoded.
+
+---
+
+### NFR-083 Character Encoding
+
+The application shall consistently use UTF-8 encoding for:
+
+- source code
+- configuration files
+- reports
+- logs
+- cached data
+
+---
+
+### NFR-084 Time Zone Portability
+
+Time handling shall remain consistent across supported operating systems.
+
+Configured reference time zones shall produce identical scheduling behavior.
+
+---
+
+### NFR-085 Dependency Portability
+
+Third-party dependencies shall support all officially supported platforms whenever practical.
+
+Platform-specific dependencies shall be minimized.
+
+---
+
+### NFR-086 Container Readiness
+
+The application architecture shall remain suitable for future containerized deployment.
+
+Container support shall not require changes to business logic.
+
+---
+
+### NFR-087 Environment Independence
+
+The application shall avoid assumptions about:
+
+- installation directory
+- user account
+- host name
+- local drive letters
+
+Environment-specific settings shall be configurable.
+
+---
+
+### NFR-088 Deployment Documentation
+
+Supported deployment procedures shall be documented.
+
+Documentation shall include:
+
+- dependency installation
+- configuration
+- startup procedure
+- upgrade procedure
+
+---
+
+### NFR-089 Future Deployment Targets
+
+The architecture shall support future deployment targets including:
+
+- Docker
+- virtual machines
+- cloud servers
+- CI/CD environments
+
+Future deployment methods shall not require redesigning the application architecture.
+
+---
+### NFR-090 Reproducible Environment
+
+The project shall provide a reproducible development environment.
+
+Dependency versions and required tools shall be documented to ensure consistent behavior across installations.
+
+---
+
+### NFR-091 Portable Configuration
+
+Configuration files shall avoid platform-specific assumptions whenever practical.
+
+The same configuration should operate across supported platforms with minimal modification.
+
+---
+
+### NFR-092 Cross-Platform Testing
+
+Major application functionality should be verified on each officially supported operating system before release.
+
+Platform-specific issues shall be documented and resolved whenever practical.
+
+---
+## 4.7 Testability
+
+### NFR-093 Testability Objective
+
+The application shall be designed to support comprehensive automated testing.
+
+Testing shall verify correctness without requiring extensive manual intervention.
+
+---
+
+### NFR-094 Unit Testing
+
+Individual modules shall support independent unit testing.
+
+Unit tests shall isolate business logic from external services whenever practical.
+
+---
+
+### NFR-095 Integration Testing
+
+The application shall support integration testing between major subsystems.
+
+Examples include:
+
+- paper retrieval and metadata processing
+- metadata processing and author analysis
+- ranking and AI analysis
+- report generation and email delivery
+
+Integration tests shall verify subsystem interoperability.
+
+---
+
+### NFR-096 End-to-End Testing
+
+The application shall support complete end-to-end testing of the processing pipeline.
+
+End-to-end tests shall simulate normal daily execution.
+
+---
+
+### NFR-097 Mock External Services
+
+External services should be replaceable by mock implementations during testing.
+
+Examples include:
+
+- arXiv
+- INSPIRE
+- AI providers
+- SMTP servers
+
+Mock services shall enable repeatable automated tests.
+
+---
+
+### NFR-098 Deterministic Testing
+
+Automated tests shall produce reproducible results.
+
+Random behavior shall be controlled whenever practical.
+
+---
+
+### NFR-099 Regression Testing
+
+Previously verified functionality shall remain protected through regression tests.
+
+Bug fixes should include corresponding regression tests whenever practical.
+
+---
+
+### NFR-100 Test Data
+
+Representative test datasets shall be maintained separately from production data.
+
+Test data shall support:
+
+- normal cases
+- boundary cases
+- failure scenarios
+
+---
+
+### NFR-101 Continuous Testing
+
+Automated tests should be executable through a single command.
+
+Future continuous integration systems shall execute the same automated test suite.
+
+---
+
+### NFR-102 Test Documentation
+
+Testing procedures shall be documented.
+
+Documentation shall describe:
+
+- test scope
+- execution method
+- expected outcomes
+
+---
+
+### NFR-103 Future Testing Expansion
+
+The testing framework shall support future additions including:
+
+- performance testing
+- stress testing
+- compatibility testing
+- security testing
+
+Future testing capabilities shall not require redesigning the testing architecture.
+
+---
+### NFR-104 AI Output Verification
+
+Automated tests shall verify the structural validity of AI-generated output.
+
+Tests shall verify required sections without relying on exact wording.
+
+---
+
+### NFR-105 Report Validation Testing
+
+Generated reports shall be automatically validated during testing.
+
+Validation may include:
+
+- HTML structure
+- required sections
+- required metadata
+- valid hyperlinks
+
+---
+
+### NFR-106 Configuration Testing
+
+Configuration files shall be validated through automated tests.
+
+Sample configurations shall remain synchronized with supported application behavior.
+
+---
+
+### NFR-107 Cache Testing
+
+Cache behavior shall be verified through automated tests.
+
+Tests should include:
+
+- cache hit
+- cache miss
+- cache expiration
+- cache invalidation
+
+---
+
+### NFR-108 Reproducible Test Environment
+
+The automated testing environment shall be reproducible.
+
+Test dependencies shall remain version controlled to ensure consistent test results across development environments.
+
+---
+## 4.8 Observability
+
+### NFR-109 Observability Objective
+
+The application shall expose sufficient operational information to understand system behavior during normal execution.
+
+Observability shall support troubleshooting, performance analysis, and long-term operational monitoring.
+
+---
+
+### NFR-110 Execution Metrics
+
+The system shall collect execution metrics including:
+
+- execution duration
+- processed papers
+- selected papers
+- AI requests
+- translation requests
+- email delivery status
+
+Metrics shall support historical comparison.
+
+---
+
+### NFR-111 Pipeline Visibility
+
+The execution status of each major processing stage shall be observable.
+
+Examples include:
+
+- pending
+- running
+- completed
+- failed
+- skipped
+
+Pipeline status shall support operational diagnostics.
+
+---
+
+### NFR-112 Resource Monitoring
+
+The application should monitor important resource usage including:
+
+- memory usage
+- CPU utilization
+- cache utilization
+- API request count
+
+Resource metrics shall support future optimization.
+
+---
+
+### NFR-113 External Service Monitoring
+
+Interactions with external services shall expose operational metrics including:
+
+- request count
+- success rate
+- failure rate
+- average response time
+
+Provider-specific implementation details shall remain isolated.
+
+---
+
+### NFR-114 AI Usage Metrics
+
+The system shall collect AI-related operational metrics including:
+
+- prompt count
+- completion count
+- token usage
+- estimated cost
+- processing latency
+
+Metrics shall support cost optimization.
+
+---
+
+### NFR-115 Report Metrics
+
+Generated reports shall include summary statistics including:
+
+- retrieved papers
+- analyzed papers
+- selected papers
+- execution duration
+
+Report metrics shall remain reproducible.
+
+---
+
+### NFR-116 Historical Trends
+
+Historical operational metrics should remain available for trend analysis.
+
+Examples include:
+
+- daily execution duration
+- AI usage
+- report size
+- cache efficiency
+
+---
+
+### NFR-117 Future Monitoring Integration
+
+The observability subsystem shall support future monitoring platforms.
+
+Examples include:
+
+- Grafana
+- Prometheus
+- OpenTelemetry
+
+Future integrations shall not require redesigning the application architecture.
+
+---
+
+### NFR-118 Diagnostic Interface
+
+The application should expose sufficient diagnostic information for troubleshooting.
+
+Diagnostic information shall remain independent of business logic.
+
+---
+## 4.8 Observability
+
+### NFR-109 Observability Objective
+
+The application shall expose sufficient operational information to understand system behavior during normal execution.
+
+Observability shall support troubleshooting, performance analysis, and long-term operational monitoring.
+
+---
+
+### NFR-110 Execution Metrics
+
+The system shall collect execution metrics including:
+
+- execution duration
+- processed papers
+- selected papers
+- AI requests
+- translation requests
+- email delivery status
+
+Metrics shall support historical comparison.
+
+---
+
+### NFR-111 Pipeline Visibility
+
+The execution status of each major processing stage shall be observable.
+
+Examples include:
+
+- pending
+- running
+- completed
+- failed
+- skipped
+
+Pipeline status shall support operational diagnostics.
+
+---
+
+### NFR-112 Resource Monitoring
+
+The application should monitor important resource usage including:
+
+- memory usage
+- CPU utilization
+- cache utilization
+- API request count
+
+Resource metrics shall support future optimization.
+
+---
+
+### NFR-113 External Service Monitoring
+
+Interactions with external services shall expose operational metrics including:
+
+- request count
+- success rate
+- failure rate
+- average response time
+
+Provider-specific implementation details shall remain isolated.
+
+---
+
+### NFR-114 AI Usage Metrics
+
+The system shall collect AI-related operational metrics including:
+
+- prompt count
+- completion count
+- token usage
+- estimated cost
+- processing latency
+
+Metrics shall support cost optimization.
+
+---
+
+### NFR-115 Report Metrics
+
+Generated reports shall include summary statistics including:
+
+- retrieved papers
+- analyzed papers
+- selected papers
+- execution duration
+
+Report metrics shall remain reproducible.
+
+---
+
+### NFR-116 Historical Trends
+
+Historical operational metrics should remain available for trend analysis.
+
+Examples include:
+
+- daily execution duration
+- AI usage
+- report size
+- cache efficiency
+
+---
+
+### NFR-117 Future Monitoring Integration
+
+The observability subsystem shall support future monitoring platforms.
+
+Examples include:
+
+- Grafana
+- Prometheus
+- OpenTelemetry
+
+Future integrations shall not require redesigning the application architecture.
+
+---
+
+### NFR-118 Diagnostic Interface
+
+The application should expose sufficient diagnostic information for troubleshooting.
+
+Diagnostic information shall remain independent of business logic.
+
+---
+### NFR-119 Daily Operational Summary
+
+Each execution shall produce a concise operational summary including:
+
+- execution status
+- execution duration
+- processed papers
+- selected papers
+- subsystem failures
+
+Operational summaries shall support rapid review.
+
+---
+
+### NFR-120 Ranking Distribution Metrics
+
+The application should record statistical information describing ranking results.
+
+Examples include:
+
+- average ranking score
+- highest ranking score
+- number of high-priority papers
+- number of filtered papers
+
+---
+
+### NFR-121 Cache Efficiency Metrics
+
+The cache subsystem shall expose efficiency metrics including:
+
+- cache hit rate
+- cache miss rate
+- cache refresh rate
+
+Cache metrics shall support optimization.
+
+---
+
+### NFR-122 AI Cost Monitoring
+
+The application shall maintain historical AI usage statistics.
+
+Examples include:
+
+- daily token usage
+- estimated daily cost
+- estimated monthly cost
+
+Cost metrics shall support resource planning.
+
+---
+
+### NFR-123 Future Dashboard Support
+
+The observability subsystem shall expose metrics in a form suitable for future dashboards.
+
+Dashboard support shall not require modification of business logic.
+
+---
+# 5. Acceptance Criteria
+
+## 5.1 Acceptance Principles
+
+### AC-001 Functional Completeness
+
+A feature shall be considered complete only when all specified functional requirements have been implemented.
+
+Partial implementation shall not be considered complete.
+
+---
+
+### AC-002 Requirement Traceability
+
+Every implemented feature shall be traceable to one or more documented requirements.
+
+Undocumented functionality should be avoided.
+
+---
+
+### AC-003 Verification
+
+Each functional requirement shall be verified through one or more verification methods.
+
+Verification methods may include:
+
+- automated testing
+- manual testing
+- inspection
+- demonstration
+
+---
+
+### AC-004 Documentation
+
+A feature shall not be considered complete unless corresponding documentation has been updated.
+
+Documentation shall remain consistent with implementation.
+
+---
+
+### AC-005 Code Review
+
+All source code shall undergo review before being accepted.
+
+Review shall verify:
+
+- correctness
+- readability
+- maintainability
+- consistency with project standards
+
+---
+
+### AC-006 Regression Protection
+
+Acceptance of new functionality shall not introduce regressions into previously verified features.
+
+Regression testing shall be completed before acceptance.
+
+---
+
+### AC-007 Reproducibility
+
+Acceptance testing shall be repeatable.
+
+Equivalent test environments shall produce equivalent outcomes.
+
+---
+## 5.2 Functional Acceptance
+
+### AC-008 Paper Retrieval
+
+Paper retrieval shall be accepted when:
+
+- monitored categories are successfully queried
+- duplicate papers are avoided
+- retrieved metadata is complete
+- retrieval failures are handled gracefully
+
+---
+
+### AC-009 Author Analysis
+
+Author analysis shall be accepted when:
+
+- author information is retrieved correctly
+- citation statistics are calculated correctly
+- missing author information is handled appropriately
+
+---
+
+### AC-010 Ranking
+
+Ranking shall be accepted when:
+
+- ranking scores are reproducible
+- papers are ordered correctly
+- configurable ranking strategies operate correctly
+
+---
+
+### AC-011 AI Analysis
+
+AI analysis shall be accepted when:
+
+- required report sections are generated
+- AI failures are handled gracefully
+- prompt version is recorded
+- token usage is recorded
+
+---
+
+### AC-012 Translation
+
+Translation shall be accepted when:
+
+- original text is preserved
+- translated text is generated successfully
+- glossary rules are respected
+
+---
+
+### AC-013 Report Generation
+
+Report generation shall be accepted when:
+
+- HTML reports are valid
+- required report sections exist
+- links function correctly
+- report metadata is complete
+
+---
+
+### AC-014 Email Delivery
+
+Email delivery shall be accepted when:
+
+- reports are delivered successfully
+- delivery failures are logged
+- retry behavior operates correctly
+
+---
+## 5.3 Quality Acceptance
+
+### AC-015 Performance
+
+Performance acceptance shall verify that execution remains within documented operational expectations.
+
+---
+
+### AC-016 Reliability
+
+Reliability acceptance shall verify that recoverable failures do not terminate the complete processing pipeline.
+
+---
+
+### AC-017 Security
+
+Security acceptance shall verify that:
+
+- credentials are protected
+- logs do not expose sensitive information
+- secure communication is used whenever supported
+
+---
+
+### AC-018 Maintainability
+
+Maintainability acceptance shall verify:
+
+- modular architecture
+- documented interfaces
+- coding standards
+- adequate documentation
+
+---
+
+### AC-019 Testability
+
+Testability acceptance shall verify that automated tests execute successfully.
+
+All mandatory tests shall pass.
+
+---
+
+### AC-020 Observability
+
+Observability acceptance shall verify that execution metrics, logs, and diagnostic information are generated successfully.
+
+---
+## 5.4 Definition of Done
+
+### AC-021 Feature Completion
+
+A feature shall be considered complete only when:
+
+- implementation is complete
+- automated tests pass
+- documentation is updated
+- code review is complete
+- no critical defects remain
+
+---
+
+### AC-022 Release Readiness
+
+A release candidate shall satisfy:
+
+- all mandatory acceptance criteria
+- successful end-to-end execution
+- successful report generation
+- successful notification delivery
+
+---
+
+### AC-023 Documentation Completeness
+
+Release documentation shall include:
+
+- installation instructions
+- configuration guide
+- user guide
+- change log
+
+---
+
+### AC-024 Version Tagging
+
+Accepted releases shall receive version identifiers.
+
+Version identifiers shall follow the project's documented versioning strategy.
+
+---
+
+### AC-025 Future Acceptance
+
+Future functionality shall define corresponding acceptance criteria before implementation begins.
+
+Acceptance criteria shall evolve together with functional requirements.
+
+---
