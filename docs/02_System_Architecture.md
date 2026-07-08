@@ -1703,3 +1703,939 @@ Each transformation shall add information without losing previously validated da
 
 ---
 
+## 6. Internal Data Models
+
+### 6.1 Purpose
+
+The application shall exchange information through well-defined internal domain models.
+
+Domain models represent business concepts rather than implementation details.
+
+All components shall communicate using these models instead of provider-specific responses or generic dictionaries.
+
+---
+
+### 6.2 Design Principles
+
+Internal data models shall satisfy the following principles:
+
+- explicit structure
+- strong typing
+- immutable semantics whenever practical
+- provider independence
+- validation support
+- serialization compatibility
+
+Domain models shall remain independent of presentation and infrastructure concerns.
+
+---
+
+### 6.3 Model Relationships
+
+The primary domain models include:
+
+- Paper
+- PaperMetadata
+- AuthorProfile
+- PaperFeatures
+- AnalysisResult
+- ReportModel
+
+Each model represents a progressively richer stage of processing.
+
+---
+
+### 6.4 Paper
+
+Paper represents the original scientific publication retrieved from external providers.
+
+Typical attributes include:
+
+- identifier
+- title
+- abstract
+- authors
+- categories
+- submission date
+- provider
+
+The Paper model shall remain as close as practical to the retrieved publication while using normalized field names.
+
+---
+
+### 6.5 PaperMetadata
+
+PaperMetadata represents normalized publication metadata.
+
+Typical attributes include:
+
+- normalized title
+- normalized abstract
+- parsed author list
+- publication information
+- subject classification
+- identifier mapping
+
+Provider-specific inconsistencies shall be resolved during metadata normalization.
+
+---
+
+### 6.6 AuthorProfile
+
+AuthorProfile represents analyzed information about paper authors.
+
+Typical attributes include:
+
+- author name
+- citation count
+- publication count
+- institution
+- collaboration statistics
+- influence indicators
+
+Author profiles shall be reusable across multiple papers.
+
+---
+
+### 6.7 PaperFeatures
+
+PaperFeatures contains structured scientific features extracted from a paper.
+
+Examples include:
+
+- citation features
+- author features
+- category features
+- collaboration features
+- publication features
+- ranking features
+
+Feature extraction shall remain deterministic.
+
+---
+
+### 6.8 AnalysisResult
+
+AnalysisResult represents structured AI-generated scientific analysis.
+
+Typical sections include:
+
+- scientific summary
+- main contribution
+- methodology
+- strengths
+- limitations
+- recommendation
+- confidence indicators
+
+AnalysisResult shall remain independent of any presentation format.
+
+---
+
+### 6.9 ReportModel
+
+ReportModel represents the complete report before rendering.
+
+Typical sections include:
+
+- report metadata
+- selected papers
+- summaries
+- translated content
+- statistics
+- references
+
+Renderers shall consume ReportModel directly.
+
+---
+
+### 6.10 Model Validation
+
+Each domain model shall define validation requirements.
+
+Validation may include:
+
+- required fields
+- value ranges
+- format verification
+- identifier consistency
+
+Invalid models shall be rejected before entering downstream processing.
+
+---
+
+### 6.11 Serialization
+
+Domain models shall support serialization for persistence and communication.
+
+Supported serialization formats may include:
+
+- JSON
+- YAML
+
+Serialization shall preserve semantic meaning without exposing implementation details.
+
+---
+
+### 6.12 Model Versioning
+
+Major domain models shall support version identification.
+
+Versioning enables:
+
+- backward compatibility
+- migration
+- cache validation
+- long-term maintenance
+
+Breaking changes shall require version updates.
+
+---
+
+### 6.13 Domain Model Evolution
+
+Domain models may evolve through additive extensions.
+
+Existing fields shall remain stable whenever practical.
+
+New functionality should extend existing models instead of replacing them.
+
+Model evolution shall preserve compatibility with previously generated reports whenever possible.
+
+---
+
+### 6.14 Provider Independence
+
+Domain models shall not expose provider-specific concepts.
+
+For example:
+
+- arXiv identifiers
+- INSPIRE identifiers
+- AI provider response formats
+
+shall be normalized into provider-independent fields.
+
+This allows business logic to remain stable even when external services evolve.
+
+---
+
+## 7. Interface Specifications
+
+### 7.1 Purpose
+
+This chapter defines the interfaces that connect major architectural components.
+
+Interfaces establish stable contracts between modules while allowing implementation details to evolve independently.
+
+All major subsystem communication shall occur through documented interfaces.
+
+---
+
+### 7.2 Interface Design Principles
+
+Interfaces shall satisfy the following principles:
+
+- stable contracts
+- minimal responsibilities
+- provider independence
+- explicit inputs
+- explicit outputs
+- implementation neutrality
+
+Interfaces shall describe behavior rather than implementation.
+
+---
+
+### 7.3 Common Interface Requirements
+
+All interfaces shall define:
+
+- supported operations
+- expected inputs
+- expected outputs
+- possible exceptions
+- validation requirements
+
+Implementations shall remain interchangeable.
+
+---
+
+### 7.4 Retrieval Provider Interface
+
+Literature providers shall implement a common retrieval interface.
+
+Typical operations include:
+
+- retrieve recent papers
+- retrieve paper metadata
+- retrieve author information
+
+Provider implementations shall normalize external responses before returning domain models.
+
+Business logic shall never invoke provider-specific APIs directly.
+
+---
+
+### 7.5 AI Provider Interface
+
+AI providers shall expose a common analysis interface.
+
+Typical operations include:
+
+- generate analysis
+- estimate usage
+- validate availability
+
+Provider implementations shall return structured AnalysisResult objects.
+
+AI provider implementations shall remain replaceable.
+
+---
+
+### 7.6 Translation Provider Interface
+
+Translation providers shall expose a unified translation interface.
+
+Typical operations include:
+
+- translate summary
+- translate abstract
+- translate report sections
+
+Translation providers shall return normalized translated content.
+
+---
+
+### 7.7 Notification Provider Interface
+
+Notification providers shall expose a common delivery interface.
+
+Supported notification targets may include:
+
+- email
+- Slack
+- Microsoft Teams
+- Telegram
+- WeChat
+
+Notification implementations shall remain independent of report generation.
+
+---
+
+### 7.8 Renderer Interface
+
+Renderers shall convert ReportModel objects into presentation artifacts.
+
+Supported renderers may include:
+
+- HTML
+- Markdown
+- PDF
+- JSON
+
+Renderers shall not modify report content.
+
+---
+
+### 7.9 Storage Interface
+
+Storage implementations shall expose a unified persistence interface.
+
+Typical operations include:
+
+- save report
+- load report
+- store cache
+- retrieve cache
+- persist execution history
+
+Storage implementations shall remain interchangeable.
+
+---
+
+### 7.10 Cache Interface
+
+Cache implementations shall provide reusable storage for intermediate results.
+
+Typical operations include:
+
+- lookup
+- store
+- invalidate
+- clear expired entries
+
+Cache implementations shall remain transparent to business logic.
+
+---
+
+### 7.11 Configuration Interface
+
+Configuration services shall expose validated application settings.
+
+Typical operations include:
+
+- retrieve configuration
+- validate configuration
+- reload configuration
+
+Configuration consumers shall access settings through this interface rather than reading configuration files directly.
+
+---
+
+### 7.12 Logging Interface
+
+Logging services shall expose standardized logging operations.
+
+Typical operations include:
+
+- information logging
+- warning logging
+- error logging
+- execution tracing
+
+Business components shall not depend on specific logging frameworks.
+
+---
+
+### 7.13 Interface Compatibility
+
+Interfaces shall prioritize backward compatibility whenever practical.
+
+Breaking interface changes shall require explicit version updates.
+
+Deprecated operations shall remain supported during defined transition periods.
+
+---
+
+### 7.14 Interface Evolution
+
+Interfaces shall evolve through additive changes whenever possible.
+
+Existing behavior shall remain stable.
+
+New functionality should be introduced through interface extension rather than incompatible modification.
+
+---
+
+### 7.15 Interface Documentation
+
+Every public interface shall be documented with:
+
+- purpose
+- responsibilities
+- expected inputs
+- expected outputs
+- failure conditions
+- implementation notes
+
+Documentation shall remain synchronized with implementation throughout the project lifecycle.
+
+---
+
+### 7.16 Recommended Python Interface Strategy
+
+Public interfaces should be implemented using Python abstract base classes (ABC) or Protocols where appropriate.
+
+Concrete implementations shall remain internal to their respective modules.
+
+Business logic shall depend only on published interfaces.
+
+This strategy improves:
+
+- testability
+- maintainability
+- provider replacement
+- static analysis
+- AI-assisted development
+
+---
+
+## 8. Deployment and Runtime Architecture
+
+### 8.1 Purpose
+
+This chapter defines how the application is initialized, executed, and terminated during runtime.
+
+The runtime architecture coordinates all application components while maintaining separation between business logic and infrastructure.
+
+The application lifecycle shall remain deterministic and reproducible.
+
+---
+
+### 8.2 Runtime Objectives
+
+The runtime architecture shall provide:
+
+- deterministic startup
+- predictable execution
+- reliable scheduling
+- graceful shutdown
+- recoverable failures
+- observable execution
+
+Runtime behavior shall remain configuration-driven.
+
+---
+
+### 8.3 Runtime Components
+
+The runtime environment consists of:
+
+- Application
+- Service Container
+- Scheduler
+- Configuration Manager
+- Logging Manager
+- Provider Registry
+- Pipeline Coordinator
+
+Each component shall have a clearly defined responsibility.
+
+---
+
+### 8.4 Startup Sequence
+
+Application startup shall execute the following sequence:
+
+1. Load configuration
+2. Validate configuration
+3. Initialize logging
+4. Initialize shared services
+5. Register providers
+6. Build dependency graph
+7. Initialize scheduler
+8. Start application
+
+Application startup shall terminate if critical initialization fails.
+
+---
+
+### 8.5 Runtime Pipeline
+
+Each scheduled execution shall perform the following pipeline:
+
+1. Retrieve papers
+2. Normalize metadata
+3. Analyze authors
+4. Aggregate citations
+5. Extract features
+6. Rank papers
+7. Select candidates
+8. Execute AI analysis
+9. Generate translations
+10. Generate report
+11. Render output
+12. Deliver notifications
+
+Pipeline execution shall remain deterministic.
+
+---
+
+### 8.6 Scheduler Execution
+
+The Scheduler is responsible for triggering pipeline execution.
+
+Scheduling behavior shall support:
+
+- periodic execution
+- manual execution
+- retry scheduling
+- failure recovery
+
+Only one scheduled execution shall run simultaneously unless explicitly configured.
+
+---
+
+### 8.7 Service Initialization
+
+The Service Container shall initialize shared services before pipeline execution.
+
+Typical initialization order includes:
+
+- configuration
+- logging
+- cache
+- storage
+- provider registry
+- scheduler
+
+Business services shall receive initialized dependencies through dependency injection.
+
+---
+
+### 8.8 Execution Context
+
+Each pipeline execution shall create an isolated execution context.
+
+The execution context may contain:
+
+- execution identifier
+- start time
+- configuration snapshot
+- provider selections
+- runtime metadata
+
+Execution context shall improve traceability and debugging.
+
+---
+
+### 8.9 Failure Recovery
+
+Recoverable failures shall not terminate the application.
+
+Recovery strategies may include:
+
+- retry operations
+- provider fallback
+- partial execution
+- graceful degradation
+
+Critical failures shall terminate the current execution while preserving diagnostic information.
+
+---
+
+### 8.10 Graceful Shutdown
+
+Application shutdown shall perform the following steps:
+
+1. Stop scheduler
+2. Complete active tasks
+3. Flush logs
+4. Persist cache
+5. Release resources
+6. Terminate services
+
+Unexpected termination shall minimize data loss whenever practical.
+
+---
+
+### 8.11 Runtime Monitoring
+
+The application shall expose sufficient runtime information for monitoring.
+
+Monitoring information may include:
+
+- execution duration
+- pipeline status
+- provider usage
+- cache statistics
+- error counts
+- notification status
+
+Monitoring shall remain independent of business logic.
+
+---
+
+### 8.12 Runtime Configuration
+
+Runtime behavior shall be configurable without source code modification.
+
+Configurable items may include:
+
+- scheduling interval
+- AI provider
+- notification targets
+- cache policies
+- retry limits
+- logging level
+
+Configuration changes shall be validated before activation.
+
+---
+
+### 8.13 Runtime State
+
+The application shall distinguish between:
+
+- configuration state
+- execution state
+- persistent state
+- transient state
+
+Business logic shall avoid hidden mutable global state.
+
+---
+
+### 8.14 Runtime Principles
+
+The runtime architecture shall satisfy the following principles:
+
+- deterministic startup
+- explicit lifecycle
+- observable execution
+- graceful recovery
+- configuration-driven behavior
+- minimal global state
+
+Runtime infrastructure shall remain independent of business rules.
+
+---
+
+### 8.15 Runtime Sequence Diagram
+
+The following conceptual execution sequence illustrates the interaction between major runtime components:
+
+Application
+
+↓
+
+Configuration Manager
+
+↓
+
+Service Container
+
+↓
+
+Scheduler
+
+↓
+
+Pipeline Coordinator
+
+↓
+
+Retrieval Layer
+
+↓
+
+Processing Layer
+
+↓
+
+Intelligence Layer
+
+↓
+
+Presentation Layer
+
+↓
+
+Notification Service
+
+↓
+
+Execution Complete
+
+This sequence defines the high-level runtime lifecycle of the application.
+
+---
+
+### 8.16 Runtime Lifecycle Diagram
+
+```mermaid
+flowchart TD
+
+A[Application Start]
+--> B[Load Configuration]
+--> C[Initialize Services]
+--> D[Register Providers]
+--> E[Start Scheduler]
+--> F[Execute Pipeline]
+--> G[Generate Report]
+--> H[Send Notification]
+--> I[Wait for Next Schedule]
+
+I --> F
+
+F --> J[Shutdown Requested]
+
+J --> K[Graceful Shutdown]
+```
+
+---
+
+## 9. Architectural Decisions and Future Evolution
+
+### 9.1 Purpose
+
+This chapter documents the major architectural decisions that guide the long-term evolution of the Paper Assistant project.
+
+These decisions provide stable architectural direction while allowing implementation details to evolve over time.
+
+---
+
+### 9.2 Architectural Goals
+
+The architecture is designed to achieve the following long-term goals:
+
+- maintainability
+- extensibility
+- reproducibility
+- provider independence
+- AI-assisted development
+- scientific reliability
+
+Architectural consistency shall take precedence over short-term implementation convenience.
+
+---
+
+### 9.3 Major Architectural Decisions
+
+The project adopts the following architectural decisions:
+
+- Layered Architecture
+- Interface-Based Design
+- Dependency Injection
+- Domain Models
+- Explicit Data Flow
+- Structured AI Output
+- Configuration-Driven Behavior
+
+These decisions form the foundation of the application architecture.
+
+---
+
+### 9.4 Layered Architecture
+
+The application adopts a layered architecture to separate responsibilities.
+
+Each architectural layer shall remain independent of implementation details in other layers.
+
+Business logic shall remain isolated from infrastructure and presentation concerns.
+
+Future extensions should preserve this separation.
+
+---
+
+### 9.5 Provider Independence
+
+External services shall remain replaceable.
+
+Examples include:
+
+- literature providers
+- AI providers
+- translation providers
+- notification providers
+
+Business logic shall remain independent of external provider implementations.
+
+Replacing a provider shall require minimal application changes.
+
+---
+
+### 9.6 Domain Model Strategy
+
+The application shall communicate through stable domain models.
+
+Provider-specific data shall be normalized before entering business logic.
+
+Domain models shall evolve through additive extensions whenever practical.
+
+Business components shall exchange domain models rather than raw provider responses.
+
+---
+
+### 9.7 Configuration Strategy
+
+Application behavior shall primarily be controlled through configuration.
+
+Configuration shall determine:
+
+- providers
+- models
+- scheduling
+- ranking parameters
+- notification behavior
+
+Source code modifications should not be required for routine operational changes.
+
+---
+
+### 9.8 Testability
+
+Architectural decisions shall prioritize automated testing.
+
+Interfaces, dependency injection, and explicit data flow shall support:
+
+- unit testing
+- integration testing
+- provider mocking
+- reproducible testing
+
+Business logic shall remain independently testable.
+
+---
+
+### 9.9 Documentation Strategy
+
+Documentation is considered part of the architecture.
+
+Architectural documentation shall evolve together with implementation.
+
+Major architectural changes shall update documentation before or together with corresponding code changes.
+
+Documentation shall remain the primary reference for future development.
+
+---
+
+### 9.10 Future Evolution
+
+Future development may include:
+
+- additional literature providers
+- additional AI providers
+- web interface
+- REST API
+- plugin architecture
+- distributed execution
+- collaborative workflows
+
+Architectural evolution shall preserve compatibility whenever practical.
+
+---
+
+### 9.11 Backward Compatibility
+
+Architectural evolution should minimize unnecessary breaking changes.
+
+Stable interfaces shall remain supported whenever practical.
+
+Breaking architectural changes shall be documented explicitly.
+
+---
+
+### 9.12 Architectural Review
+
+Major architectural decisions should be reviewed periodically.
+
+Review criteria may include:
+
+- maintainability
+- performance
+- extensibility
+- implementation complexity
+- developer experience
+
+Reviews shall prioritize long-term project sustainability.
+
+---
+
+### 9.13 Final Architectural Principles
+
+The Paper Assistant architecture shall remain guided by the following principles:
+
+- simplicity
+- clarity
+- explicit interfaces
+- reproducible processing
+- modular design
+- provider independence
+- documentation-driven development
+- long-term maintainability
+
+All future development should remain consistent with these principles.
+
+---
+
+### 9.14 Conclusion
+
+This document defines the high-level architecture of the Paper Assistant project.
+
+Implementation details may evolve, but architectural principles, domain models, interfaces, and processing flow shall remain the primary foundation for future development.
+
+All contributors, including AI coding assistants, should treat this document as the authoritative architectural reference for the project.
+
+---
