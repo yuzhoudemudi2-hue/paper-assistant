@@ -65,64 +65,58 @@ Email Sender
 Every paper should be represented using the following structure.
 
 ```python
-Paper
+class Paper:
+    title: str
+    authors: list[Author]
+    abstract: str
+    categories: list[str]
 
-title: str
+    arxiv_id: str
+    arxiv_url: str
+    pdf_url: str
+    submitted_date: datetime
 
-authors: list[str]
+    # INSPIRE Information
+    author_statistics: list[Author]
 
-abstract: str
+    # Filtering
+    matched_rules: list[str]
+    priority_score: float
 
-categories: list[str]
+    # Hot Topic Analysis
+    is_hot: bool
+    hot_score: float
+    hot_reason: str
+    keywords: list[str]
 
-arxiv_id: str
+    # Translation
+    translated_title: str
+    translated_abstract: str
 
-arxiv_url: str
+    # LLM Summary
+    summary: PaperSummary
 
-pdf_url: str
-
-submitted_date: datetime
-
-is_hot: bool
-
-hot_score: float
-
-summary: str
-
-translation_title: str
-
-translation_abstract: str
+    # Report
+    report_section: str
 ```
-
-Required fields:
-
-- title
-- authors
-- abstract
-- arxiv_id
-
-Optional fields may be filled by later modules.
 
 ---
 
 # 4. Author Object
 
 ```python
-Author
+class Author:
+    name: str
 
-name: str
+    total_citations: int
+    paper_count: int
 
-total_citations: int
+    highest_cited_paper: str
+    highest_citations: int
 
-paper_count: int
+    h_index: int
 
-highest_cited_paper: str
-
-highest_citations: int
-
-h_index: int
-
-inspire_url: str
+    inspire_url: str
 ```
 
 ---
