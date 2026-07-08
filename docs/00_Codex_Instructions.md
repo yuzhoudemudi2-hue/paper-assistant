@@ -1360,3 +1360,1032 @@ do not log it.
 Logging should improve maintainability without compromising security.
 
 ---
+# 9. Configuration Management
+
+Paper Assistant must be fully configuration-driven.
+
+Behavior should be controlled through configuration files rather than hardcoded values.
+
+Configuration should be easy to modify without changing source code.
+
+---
+
+## 9.1 Configuration Files
+
+All configuration files must reside in the config/ directory.
+
+Recommended configuration files include:
+
+- config.yaml
+- ai.yaml
+- email.yaml
+- logging.yaml
+- ranking.yaml
+- scheduler.yaml
+
+---
+
+## 9.2 No Hardcoded Values
+
+Never hardcode:
+
+- API Keys
+- URLs
+- Email addresses
+- Passwords
+- File paths
+- Timeout values
+- Retry counts
+- Model names
+- Threshold values
+
+These values must be loaded from configuration.
+
+---
+
+## 9.3 Configuration Validation
+
+All configuration files must be validated during application startup.
+
+Validation should check:
+
+- Required fields
+- Data types
+- Value ranges
+- File existence
+- Directory existence
+- Email format
+- URL format
+
+Invalid configuration should stop application startup with a clear error message.
+
+---
+
+## 9.4 Default Values
+
+Reasonable default values may be provided for optional settings.
+
+Required settings must never have hidden defaults.
+
+Users should always know which values require explicit configuration.
+
+---
+
+## 9.5 Environment Variables
+
+Sensitive information should be loaded from environment variables whenever practical.
+
+Examples include:
+
+- API Keys
+- SMTP passwords
+- Authentication tokens
+
+Configuration files should never contain production secrets.
+
+---
+
+## 9.6 Configuration Access
+
+Configuration should be loaded through a centralized configuration manager.
+
+Avoid reading YAML or JSON files directly throughout the codebase.
+
+All modules should obtain configuration through the same interface.
+
+---
+
+## 9.7 Configuration Documentation
+
+Every configuration option must include:
+
+- Description
+- Data type
+- Default value
+- Allowed values
+
+Configuration should be self-explanatory.
+
+---
+
+## 9.8 Runtime Configuration
+
+Configuration should normally be loaded once during startup.
+
+Avoid repeatedly reading configuration files unless dynamic reloading is explicitly supported.
+
+---
+
+## 9.9 Version Compatibility
+
+Configuration changes should preserve backward compatibility whenever practical.
+
+Deprecated configuration options should generate warnings before removal.
+
+---
+
+## 9.10 Decision Rules for Codex
+
+Whenever a value may reasonably change in future versions,
+
+place it in configuration instead of source code.
+
+Prefer configurable software over hardcoded software.
+
+Never require users to modify Python source files for normal customization.
+
+---
+# 10. Dependency Management
+
+Paper Assistant must use a consistent and reproducible dependency management strategy.
+
+Dependencies should be explicitly declared, version-controlled, and regularly maintained.
+
+---
+
+## 10.1 Package Manager
+
+The project uses **uv** as the primary dependency manager.
+
+Do not mix multiple package managers within the project.
+
+Avoid using pip directly unless explicitly required.
+
+---
+
+## 10.2 Project Metadata
+
+Project metadata and dependencies must be managed through `pyproject.toml`.
+
+Avoid legacy dependency files whenever possible.
+
+The project should have a single authoritative dependency definition.
+
+---
+
+## 10.3 Version Pinning
+
+Critical dependencies should use compatible version constraints.
+
+Avoid completely unbounded dependency versions.
+
+Example:
+
+```
+httpx>=0.28,<1.0
+```
+
+This improves long-term reproducibility while allowing compatible updates.
+
+---
+
+## 10.4 Dependency Categories
+
+Dependencies should be grouped by purpose.
+
+Typical categories include:
+
+- Runtime dependencies
+- Development dependencies
+- Testing dependencies
+- Documentation dependencies
+
+Development tools should not become runtime requirements.
+
+---
+
+## 10.5 Approved Libraries
+
+Prefer mature, actively maintained libraries.
+
+Typical examples include:
+
+- httpx
+- pydantic
+- pyyaml
+- jinja2
+- tenacity
+- pytest
+- ruff
+- black
+
+Avoid introducing obscure or unmaintained packages without strong justification.
+
+---
+
+## 10.6 Minimize Dependencies
+
+Do not add a new dependency unless it provides significant value.
+
+Prefer the Python standard library whenever practical.
+
+Each additional dependency increases maintenance cost.
+
+---
+
+## 10.7 Security
+
+Dependencies should be updated regularly.
+
+Known vulnerable packages should be replaced or upgraded as soon as practical.
+
+Never intentionally depend on abandoned libraries.
+
+---
+
+## 10.8 Compatibility
+
+New dependencies should support:
+
+- Python 3.13+
+- Windows
+- Linux
+
+Cross-platform compatibility is required.
+
+---
+
+## 10.9 Optional Dependencies
+
+Features that are not required by all users should use optional dependencies.
+
+Examples include:
+
+- PDF generation
+- Web dashboard
+- Future database backends
+
+Core functionality should remain lightweight.
+
+---
+
+## 10.10 AI SDK Management
+
+AI providers should be isolated behind project interfaces.
+
+The application should not tightly couple business logic to any single AI SDK.
+
+Changing AI providers should require minimal code changes.
+
+---
+
+## 10.11 Dependency Updates
+
+When upgrading dependencies:
+
+- Review release notes.
+- Check for breaking changes.
+- Update tests if necessary.
+- Verify compatibility before deployment.
+
+Never upgrade packages blindly.
+
+---
+
+## 10.12 Decision Rules for Codex
+
+When choosing between implementing functionality manually or introducing a new dependency:
+
+Prefer the standard library whenever it provides a clear and maintainable solution.
+
+Introduce third-party libraries only when they significantly improve reliability, maintainability, or development efficiency.
+
+Every new dependency should have a clear justification.
+
+---
+# 11. Testing Standards
+
+Testing is mandatory for all production code.
+
+Every important feature should be covered by automated tests.
+
+Code without tests should be considered incomplete.
+
+---
+
+## 11.1 Testing Framework
+
+Use pytest as the standard testing framework.
+
+All tests should be compatible with the latest supported pytest version.
+
+---
+
+## 11.2 Test Organization
+
+The tests directory should mirror the structure of the src directory.
+
+Example:
+
+src/arxiv/fetcher.py
+
+↓
+
+tests/arxiv/test_fetcher.py
+
+This correspondence should remain consistent throughout the project.
+
+---
+
+## 11.3 Unit Tests
+
+Every public function should have unit tests whenever practical.
+
+Unit tests should verify:
+
+- Normal behavior
+- Boundary conditions
+- Invalid input
+- Exception handling
+
+---
+
+## 11.4 Integration Tests
+
+Integration tests should verify interactions between modules.
+
+Examples include:
+
+- arXiv download + paper parsing
+- INSPIRE search + ranking
+- AI analysis + report generation
+- Report generation + email delivery
+
+---
+
+## 11.5 Mock External Services
+
+External services should not be required for routine testing.
+
+Use mocks or fixtures for:
+
+- arXiv
+- INSPIRE
+- AI providers
+- SMTP servers
+
+Tests should remain deterministic.
+
+---
+
+## 11.6 Test Data
+
+Test data should be small, representative, and reusable.
+
+Avoid unnecessary duplication of test files.
+
+Scientific examples should preserve realistic structure while avoiding excessive size.
+
+---
+
+## 11.7 Edge Cases
+
+Tests should include edge cases.
+
+Examples include:
+
+- Empty paper list
+- Missing author information
+- Network timeout
+- Invalid configuration
+- API rate limit
+- Translation failure
+
+---
+
+## 11.8 Regression Tests
+
+Whenever a bug is fixed, add a regression test.
+
+The regression test should fail before the fix and pass afterward.
+
+Do not fix recurring bugs without adding tests.
+
+---
+
+## 11.9 Performance Tests
+
+Critical workflows should include performance benchmarks when appropriate.
+
+Examples include:
+
+- Ranking thousands of papers
+- Generating large HTML reports
+- Processing long author lists
+
+Performance tests should not replace functional tests.
+
+---
+
+## 11.10 Code Coverage
+
+High test coverage is encouraged.
+
+Coverage should focus on meaningful verification rather than achieving arbitrary percentages.
+
+Business logic should receive higher coverage than utility code.
+
+---
+
+## 11.11 Continuous Testing
+
+Tests should run before every release.
+
+New features should not break existing functionality.
+
+Failing tests should be treated as release blockers.
+
+---
+
+## 11.12 Decision Rules for Codex
+
+Whenever generating production code:
+
+Generate the corresponding tests at the same time.
+
+Whenever modifying existing functionality:
+
+Update the affected tests accordingly.
+
+Whenever removing functionality:
+
+Remove obsolete tests that no longer provide value.
+
+Never leave production code without appropriate automated tests.
+
+---
+# 12. AI Integration Standards
+
+Artificial Intelligence is a core capability of Paper Assistant.
+
+AI should assist scientific analysis while preserving factual accuracy, reproducibility, and transparency.
+
+Every AI interaction should be deterministic whenever practical.
+
+---
+
+## 12.1 Supported AI Providers
+
+The AI layer should support multiple providers through a unified interface.
+
+Supported providers may include:
+
+- OpenAI
+- Anthropic
+- Google Gemini
+- DeepSeek
+
+Business logic must never directly depend on a specific provider SDK.
+
+---
+
+## 12.2 Provider Abstraction
+
+All AI providers should implement a common interface.
+
+Business modules should communicate with the interface rather than individual SDKs.
+
+Changing AI providers should require minimal code changes.
+
+---
+
+## 12.3 Prompt Management
+
+Prompts must be stored as external Markdown files.
+
+Do not hardcode prompts inside Python source code.
+
+Each prompt should have:
+
+- Name
+- Purpose
+- Version
+- Supported models
+- Expected input
+- Expected output
+
+---
+
+## 12.4 Prompt Versioning
+
+Prompt templates should be version-controlled.
+
+Changes to prompts should be tracked through Git.
+
+Major prompt revisions should include documentation describing the motivation for the change.
+
+---
+
+## 12.5 Scientific Accuracy
+
+AI must never fabricate scientific facts.
+
+If information is unavailable, uncertain, or unsupported by reliable sources, the output should explicitly state the limitation.
+
+Never invent:
+
+- citation counts
+- author information
+- publication dates
+- journal information
+- experimental results
+
+---
+
+## 12.6 Hallucination Prevention
+
+Whenever possible, AI responses should be grounded in verified input data.
+
+Generated summaries must remain consistent with:
+
+- paper title
+- abstract
+- metadata
+- verified citation information
+
+AI should avoid unsupported speculation.
+
+---
+
+## 12.7 Translation Quality
+
+Translations should preserve the original scientific meaning.
+
+Do not simplify or reinterpret technical terminology.
+
+Established terminology should follow standard usage in the physics community whenever possible.
+
+---
+
+## 12.8 Analysis Scope
+
+AI analysis may include:
+
+- Research objectives
+- Scientific background
+- Core methodology
+- Main conclusions
+- Innovation
+- Limitations
+- Possible future work
+
+The analysis should clearly distinguish facts from interpretation.
+
+---
+
+## 12.9 Token Management
+
+AI requests should use tokens efficiently.
+
+Avoid unnecessarily long prompts.
+
+Reuse shared context whenever practical.
+
+Large documents should be processed in logical sections.
+
+---
+
+## 12.10 Cost Awareness
+
+AI requests may incur financial cost.
+
+Avoid unnecessary repeated requests.
+
+Cache reusable AI results whenever appropriate.
+
+Prefer deterministic reuse over repeated generation.
+
+---
+
+## 12.11 Retry Strategy
+
+Temporary AI failures should support configurable retry.
+
+Examples include:
+
+- network timeout
+- rate limiting
+- temporary service unavailable
+
+Permanent failures should not be retried indefinitely.
+
+---
+
+## 12.12 AI Response Validation
+
+AI responses should be validated before use.
+
+Validation may include:
+
+- required sections
+- language
+- formatting
+- completeness
+
+Invalid responses should trigger retry or fallback behavior.
+
+---
+
+## 12.13 Reproducibility
+
+Whenever practical, AI analyses should be reproducible.
+
+The following information should be recorded:
+
+- provider
+- model
+- prompt version
+- generation time
+- configuration version
+
+This information supports future verification.
+
+---
+
+## 12.14 Decision Rules for Codex
+
+Whenever AI is used:
+
+Prefer factual correctness over stylistic quality.
+
+Prefer transparency over unsupported confidence.
+
+Prefer reproducibility over randomness.
+
+Prefer modular AI integration over provider-specific implementations.
+
+Never allow AI-generated content to overwrite verified scientific information.
+
+---
+# 13. External API Standards
+
+Paper Assistant depends on multiple external services.
+
+All external APIs must be accessed through well-defined client modules.
+
+Business logic must never directly perform HTTP requests.
+
+---
+
+## 13.1 API Client Layer
+
+Every external service should have its own client.
+
+Examples:
+
+- ArxivClient
+- InspireClient
+- OpenAIClient
+- GeminiClient
+- EmailClient
+
+Business modules should communicate only with these clients.
+
+---
+
+## 13.2 HTTP Library
+
+Use httpx as the standard HTTP client.
+
+Avoid mixing multiple HTTP libraries.
+
+Maintain a shared HTTP client whenever practical.
+
+---
+
+## 13.3 User-Agent
+
+Every HTTP request should include a descriptive User-Agent.
+
+Example:
+
+Paper-Assistant/1.0
+
+User-Agent should include:
+
+- project name
+- project version
+
+Do not impersonate web browsers.
+
+---
+
+## 13.4 Request Timeout
+
+Every request must define:
+
+- connection timeout
+- read timeout
+- write timeout
+
+Timeout values must come from configuration.
+
+Never rely on default timeout behavior.
+
+---
+
+## 13.5 Retry Policy
+
+Retry only temporary failures.
+
+Examples:
+
+- timeout
+- HTTP 429
+- HTTP 500
+- HTTP 502
+- HTTP 503
+- HTTP 504
+
+Retry count and delay should be configurable.
+
+Use exponential backoff.
+
+---
+
+## 13.6 Rate Limiting
+
+Respect every service's rate limits.
+
+Never intentionally overload external services.
+
+When rate limits are reached:
+
+- wait
+- retry
+- continue
+
+Do not continuously send requests.
+
+---
+
+## 13.7 Data Validation
+
+Validate every response before use.
+
+Verify:
+
+- required fields
+- expected types
+- expected formats
+
+Never assume external APIs always return valid data.
+
+---
+
+## 13.8 Caching
+
+Frequently reused API responses should be cached.
+
+Examples:
+
+- author profiles
+- citation statistics
+- AI analysis
+- translation results
+
+Cache lifetime should be configurable.
+
+---
+
+## 13.9 Authentication
+
+Authentication information must never appear in source code.
+
+Credentials should be loaded from secure configuration or environment variables.
+
+Never log authentication credentials.
+
+---
+
+## 13.10 Error Reporting
+
+API failures should include:
+
+- service name
+- endpoint
+- HTTP status
+- retry count
+- request identifier (if available)
+
+Sensitive request contents should not be logged.
+
+---
+
+## 13.11 API Versioning
+
+API versions should be configurable whenever supported.
+
+Avoid embedding version numbers throughout the codebase.
+
+Future API upgrades should require minimal changes.
+
+---
+
+## 13.12 Fallback Behavior
+
+When one external service is temporarily unavailable,
+
+the application should continue executing unaffected tasks whenever possible.
+
+Examples:
+
+If AI analysis fails:
+
+- continue ranking
+- continue report generation
+- mark AI section as unavailable
+
+If INSPIRE fails:
+
+- continue downloading papers
+- report missing citation information
+
+---
+
+## 13.13 Decision Rules for Codex
+
+Whenever integrating a new external service:
+
+- isolate it inside its own client
+- validate every response
+- handle failures gracefully
+- respect rate limits
+- cache reusable data
+- avoid unnecessary requests
+
+Business logic must remain independent of transport details.
+
+---
+# 14. Git Workflow and Development Process
+
+Paper Assistant should be developed through small, incremental, and verifiable changes.
+
+Every commit should represent one complete and meaningful improvement.
+
+Large, unrelated changes should never be combined into a single commit.
+
+---
+
+## 14.1 Development Philosophy
+
+Development should proceed in the following order:
+
+1. Update documentation.
+2. Implement the feature.
+3. Write tests.
+4. Verify functionality.
+5. Commit changes.
+6. Push to the remote repository.
+
+Documentation should never lag behind implementation.
+
+---
+
+## 14.2 Small Commits
+
+Each commit should implement only one logical feature or improvement.
+
+Good examples:
+
+- Add arXiv client
+- Implement INSPIRE author lookup
+- Add HTML report generator
+- Improve ranking algorithm
+
+Avoid combining unrelated changes.
+
+---
+
+## 14.3 Commit Messages
+
+Commit messages should use the imperative mood.
+
+Examples:
+
+- Add email configuration
+- Improve translation quality
+- Refactor AI interface
+- Fix timeout handling
+
+Avoid messages such as:
+
+- Update
+- Fix
+- Changes
+- Miscellaneous
+
+Commit messages should clearly describe the primary change.
+
+---
+
+## 14.4 Feature Branches
+
+Large features should be developed in separate branches.
+
+Examples:
+
+- feature/arxiv-client
+- feature/dashboard
+- feature/translation
+- feature/openalex-support
+
+Small documentation updates may be committed directly to the main branch.
+
+---
+
+## 14.5 Pull Requests
+
+Every major feature should be reviewed before merging.
+
+The pull request description should include:
+
+- Purpose
+- Summary of changes
+- Testing performed
+- Potential risks
+
+---
+
+## 14.6 Code Review
+
+Every significant change should be reviewed for:
+
+- correctness
+- readability
+- maintainability
+- consistency
+- performance
+- security
+
+Code review comments should explain the reasoning behind suggested changes.
+
+---
+
+## 14.7 Refactoring
+
+Refactoring should preserve existing behavior.
+
+Whenever refactoring:
+
+- update tests if necessary
+- avoid introducing unrelated changes
+- maintain backward compatibility whenever practical
+
+---
+
+## 14.8 Release Readiness
+
+A feature is considered complete only if:
+
+- implementation is finished
+- tests pass
+- documentation is updated
+- configuration is documented
+- logging is implemented
+- error handling is complete
+
+Incomplete features should not be marked as finished.
+
+---
+
+## 14.9 Rollback Strategy
+
+Every commit should be independently reversible.
+
+Avoid commits that leave the project in a broken state.
+
+The main branch should remain buildable at all times.
+
+---
+
+## 14.10 Codex Development Rules
+
+When generating code, Codex should:
+
+- modify the minimum number of files necessary
+- preserve existing project structure
+- avoid unnecessary refactoring
+- avoid unrelated formatting changes
+- explain significant architectural decisions
+- generate tests together with production code
+
+Large changes should be divided into multiple smaller implementation steps.
+
+---
+
+## 14.11 Decision Rules for Codex
+
+Whenever multiple development approaches are possible:
+
+Prefer the approach that:
+
+- minimizes risk
+- preserves existing behavior
+- simplifies future maintenance
+- keeps commits small
+- keeps reviews easy
+
+The long-term maintainability of the project is more important than short-term implementation speed.
+
+---
