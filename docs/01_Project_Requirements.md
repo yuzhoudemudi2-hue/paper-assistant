@@ -1335,3 +1335,1339 @@ The recommendation shall be accompanied by a brief justification based on the pa
 The recommendation shall be advisory only and shall not replace the user's scientific judgment.
 
 ---
+## 3.7 Translation
+
+### FR-087 Translation Objective
+
+The translation subsystem shall provide accurate Chinese translations of selected scientific content.
+
+The primary objective is to improve reading efficiency while preserving scientific meaning.
+
+Translation shall not replace the original English text.
+
+---
+
+### FR-088 Translation Scope
+
+The translation subsystem shall translate:
+
+- paper title
+- abstract
+- AI-generated summary (when applicable)
+
+Additional content may be translated in future versions.
+
+---
+
+### FR-089 Original Text Preservation
+
+The original English text shall always be preserved.
+
+Reports shall display both the original English content and the corresponding Chinese translation.
+
+Users shall be able to read either version independently.
+
+---
+
+### FR-090 Scientific Terminology Consistency
+
+Scientific terminology shall be translated consistently throughout the system.
+
+Identical technical terms should use identical Chinese translations whenever practical.
+
+Terminology consistency shall be maintained across reports.
+
+---
+
+### FR-091 Mathematical Expression Preservation
+
+Mathematical symbols, equations, variables, and LaTeX expressions shall remain unchanged during translation whenever practical.
+
+Translation shall preserve the scientific meaning of mathematical content.
+
+---
+
+### FR-092 Proper Noun Preservation
+
+Proper nouns shall not be translated unnecessarily.
+
+Examples include:
+
+- researcher names
+- institution names
+- experiment names
+- software names
+- telescope names
+- detector names
+
+Commonly accepted Chinese names may be used when appropriate.
+
+---
+
+### FR-093 Translation Quality
+
+Translations shall prioritize:
+
+- scientific accuracy
+- clarity
+- consistency
+
+Literal translation shall be preferred over stylistic rewriting whenever scientific precision could otherwise be affected.
+
+---
+
+### FR-094 Translation Validation
+
+Generated translations shall be validated before inclusion in reports.
+
+Validation should verify:
+
+- successful completion
+- non-empty content
+- preservation of important terminology
+- acceptable output length
+
+Invalid translations shall be regenerated or reported.
+
+---
+
+### FR-095 Translation Traceability
+
+Each translation shall record:
+
+- translation provider
+- model name
+- prompt version
+- translation timestamp
+
+Translation metadata shall support reproducibility.
+
+---
+
+### FR-096 Translation Provider Abstraction
+
+The translation subsystem shall support multiple providers through a common interface.
+
+Changing translation providers shall not require modifications to business logic.
+
+---
+
+### FR-097 Translation Cache
+
+Previously translated content may be cached.
+
+Cache usage shall reduce repeated translation requests.
+
+Cache expiration policies shall be configurable.
+
+---
+
+### FR-098 Future Language Support
+
+The translation subsystem shall support future expansion to additional languages.
+
+The architecture shall remain language-independent whenever practical.
+
+---
+
+### FR-099 Glossary Support
+
+The system shall support a configurable scientific glossary.
+
+Preferred translations for important technical terms may be defined in configuration files.
+
+Glossary entries shall take precedence over automatically generated translations whenever applicable.
+
+---
+
+### FR-100 User Review
+
+Users shall be able to compare the original English text with the translated Chinese text.
+
+The system shall never hide the original scientific content.
+
+---
+### FR-101 Standardized Scientific Terminology
+
+The translation subsystem should follow commonly accepted terminology used in the Chinese theoretical physics community whenever such terminology exists.
+
+Examples include:
+
+- General Relativity
+- Quantum Field Theory
+- Gauge Theory
+- Black Hole
+- AdS/CFT Correspondence
+- Effective Field Theory
+
+The system should avoid creating inconsistent translations for established scientific concepts.
+
+---
+
+### FR-102 Translation Confidence
+
+The translation subsystem may assign a confidence level to each translation.
+
+Low-confidence translations may be highlighted for user attention.
+
+Confidence information shall not modify the original translated content.
+
+---
+## 3.8 Report Generation
+
+### FR-103 Report Objective
+
+The reporting subsystem shall generate a clear, concise, and scientifically useful daily report.
+
+The report shall assist researchers in identifying papers worthy of further reading.
+
+The report shall emphasize readability and efficient information retrieval.
+
+---
+
+### FR-104 Report Format
+
+The primary report format shall be HTML.
+
+The architecture shall support additional output formats in future versions, including:
+
+- PDF
+- Markdown
+- Plain text
+
+---
+
+### FR-105 Report Structure
+
+Each daily report shall contain the following sections:
+
+- execution summary
+- report overview
+- selected papers
+- complete processed paper list (optional)
+- execution statistics
+
+Additional sections may be added in future versions.
+
+---
+
+### FR-106 Execution Summary
+
+The report shall include an execution summary containing:
+
+- execution date
+- monitored categories
+- total retrieved papers
+- selected papers
+- execution duration
+- AI provider
+- report generation time
+
+---
+
+### FR-107 Paper Information
+
+Each selected paper shall include at least:
+
+- title
+- Chinese title
+- authors
+- arXiv identifier
+- submission date
+- primary category
+- abstract
+- Chinese translation
+- AI summary
+- ranking score
+- ranking explanation
+
+Additional metadata may be displayed when available.
+
+---
+
+### FR-108 Citation Information
+
+When available, the report shall display citation-related information including:
+
+- maximum author citation count
+- average citation count
+- median citation count
+- analyzed author count
+
+Citation statistics shall clearly distinguish factual values from derived metrics.
+
+---
+
+### FR-109 Reading Recommendation
+
+Each selected paper shall include a concise reading recommendation.
+
+The recommendation shall summarize why the paper may deserve further attention.
+
+Recommendations shall remain advisory.
+
+---
+
+### FR-110 External Links
+
+Each paper shall include direct links to:
+
+- arXiv abstract page
+- PDF download
+
+Future versions may include links to additional scientific resources.
+
+---
+
+### FR-111 Report Ordering
+
+Selected papers shall appear in ranking order.
+
+The ordering shall remain deterministic.
+
+Users may configure alternative ordering strategies.
+
+---
+
+### FR-112 Visual Organization
+
+Reports shall use visual hierarchy to improve readability.
+
+Examples include:
+
+- section headings
+- tables
+- highlighted recommendations
+- expandable sections
+- consistent typography
+
+Presentation shall not alter scientific content.
+
+---
+
+### FR-113 Report Metadata
+
+Every generated report shall record:
+
+- report version
+- generation timestamp
+- configuration version
+- ranking version
+- AI model
+- prompt version
+
+Metadata shall support reproducibility.
+
+---
+
+### FR-114 Report Archiving
+
+Generated reports shall be archived automatically.
+
+Historical reports shall remain accessible.
+
+Archive organization shall follow chronological order.
+
+---
+
+### FR-115 Report Reproducibility
+
+Reports generated from identical input data and configuration shall remain reproducible.
+
+The report generation process shall avoid unnecessary nondeterministic behavior.
+
+---
+
+### FR-116 Report Validation
+
+Before delivery, the report shall be validated.
+
+Validation should verify:
+
+- successful generation
+- required sections
+- complete paper entries
+- valid external links
+- valid HTML structure
+
+Invalid reports shall not be delivered.
+
+---
+
+### FR-117 Future Report Features
+
+The reporting subsystem shall support future enhancements including:
+
+- interactive charts
+- citation trend visualization
+- keyword statistics
+- institution statistics
+- author statistics
+- customizable layouts
+
+Future enhancements shall not require redesigning the reporting architecture.
+
+---
+### FR-118 Report Sections by Priority
+
+Selected papers may be grouped according to their ranking priority.
+
+Example sections include:
+
+- High Priority
+- Medium Priority
+- Exploratory
+
+Grouping rules shall be configurable.
+
+---
+
+### FR-119 Scientific Transparency
+
+Every numerical value presented in the report shall be traceable to its originating data source or calculation.
+
+Derived metrics shall be clearly distinguished from directly retrieved data.
+
+---
+
+### FR-120 Report Completeness
+
+If information for a paper is unavailable due to external service failures, the report shall explicitly indicate the missing information.
+
+The report shall never silently omit unavailable content.
+
+---
+## 3.9 Email Delivery
+
+### FR-121 Email Delivery Objective
+
+The email subsystem shall automatically deliver the generated daily report to the configured recipients.
+
+Email delivery shall be the default notification mechanism for the initial release.
+
+---
+
+### FR-122 Email Format
+
+Emails shall support HTML content.
+
+Future versions may additionally support:
+
+- plain text
+- PDF attachment
+- Markdown attachment
+
+The HTML version shall remain the primary delivery format.
+
+---
+
+### FR-123 Email Subject
+
+The email subject shall be configurable.
+
+The default subject should include:
+
+- report date
+- monitored categories
+- optional execution status
+
+Example:
+
+Paper Assistant Daily Report - 2026-07-08
+
+---
+
+### FR-124 Email Content
+
+The email body shall contain:
+
+- execution summary
+- report overview
+- selected papers
+- direct links to arXiv
+- generation timestamp
+
+The email body shall remain readable on both desktop and mobile devices.
+
+---
+
+### FR-125 Multiple Recipients
+
+The system shall support multiple recipients.
+
+Recipients may be configured as:
+
+- To
+- CC
+- BCC
+
+Recipient lists shall be configurable.
+
+---
+
+### FR-126 Email Attachments
+
+The architecture shall support optional email attachments.
+
+Future examples include:
+
+- PDF reports
+- Markdown reports
+- execution logs
+
+Attachment generation shall remain independent of email delivery.
+
+---
+
+### FR-127 SMTP Configuration
+
+SMTP configuration shall be stored externally.
+
+Configuration shall include:
+
+- server address
+- port
+- authentication method
+- sender address
+
+Sensitive credentials shall never be hardcoded.
+
+---
+
+### FR-128 Delivery Failure Handling
+
+If email delivery fails,
+
+the system shall:
+
+- record the failure
+- retry according to configuration
+- preserve the generated report
+
+Delivery failure shall not invalidate report generation.
+
+---
+
+### FR-129 Delivery Status
+
+The system shall record:
+
+- delivery success
+- delivery failure
+- retry attempts
+- delivery timestamp
+
+Delivery status shall be available for diagnostics.
+
+---
+
+### FR-130 Secure Transmission
+
+Email transmission shall use encrypted connections whenever supported.
+
+Sensitive credentials shall be protected throughout the delivery process.
+
+---
+
+### FR-131 Future Notification Channels
+
+The notification subsystem shall support future delivery channels including:
+
+- Microsoft Teams
+- Slack
+- Discord
+- Telegram
+- WeChat
+- Web dashboard notifications
+
+Additional notification channels shall not require redesigning the core workflow.
+
+---
+
+### FR-132 Delivery Reproducibility
+
+The report delivered by email shall be identical to the archived report generated during the same execution.
+
+Email delivery shall not modify report contents.
+
+---
+### FR-133 Delivery Confirmation
+
+The system shall clearly distinguish between:
+
+- report successfully generated
+- report successfully delivered
+
+Report generation success shall not imply successful email delivery.
+
+---
+
+### FR-134 Daily Delivery Guarantee
+
+For each scheduled execution,
+
+the system shall attempt to deliver at most one daily report unless multiple deliveries are explicitly configured.
+
+Duplicate email delivery shall be avoided.
+
+---
+
+### FR-135 Future Personalization
+
+The notification subsystem shall support future recipient-specific customization.
+
+Examples include:
+
+- language preference
+- ranking profile
+- subscribed arXiv categories
+- preferred report format
+
+Personalization shall remain independent of report generation.
+
+---
+## 3.10 Configuration Management
+
+### FR-136 Configuration Objective
+
+The configuration subsystem shall control the behavior of the application without requiring source code modifications.
+
+Configuration shall remain separate from business logic.
+
+---
+
+### FR-137 Configuration Files
+
+System configuration shall be stored in external configuration files.
+
+Recommended configuration areas include:
+
+- application
+- arXiv
+- AI
+- ranking
+- translation
+- email
+- logging
+- scheduler
+
+Configuration files shall use a human-readable format.
+
+---
+
+### FR-138 Configuration Validation
+
+Configuration values shall be validated before application startup.
+
+Validation shall detect:
+
+- missing required values
+- invalid data types
+- unsupported options
+- conflicting settings
+
+Invalid configuration shall prevent application startup and produce meaningful error messages.
+
+---
+
+### FR-139 Default Values
+
+Reasonable default values shall be provided whenever practical.
+
+Users shall only need to modify configuration values that differ from the defaults.
+
+---
+
+### FR-140 Sensitive Information
+
+Sensitive information shall not be stored directly in version-controlled configuration files.
+
+Examples include:
+
+- API keys
+- SMTP passwords
+- authentication tokens
+
+Sensitive values should be supplied through environment variables or secure secret management mechanisms.
+
+---
+
+### FR-141 Configuration Versioning
+
+The system shall record the configuration version used during each execution.
+
+Configuration version information shall support reproducibility.
+
+---
+
+### FR-142 Runtime Configuration Access
+
+Application components shall access configuration through a centralized configuration interface.
+
+Components shall not read configuration files directly.
+
+---
+
+### FR-143 Configuration Documentation
+
+Every configurable option shall be documented.
+
+Documentation shall include:
+
+- purpose
+- allowed values
+- default value
+- examples
+
+---
+
+### FR-144 Dynamic Configuration
+
+Configuration changes shall take effect on the next execution without requiring source code modifications.
+
+Application restart requirements shall be clearly documented.
+
+---
+
+### FR-145 User Preferences
+
+User-adjustable preferences shall be configurable.
+
+Examples include:
+
+- monitored categories
+- ranking thresholds
+- report language
+- AI provider
+- notification recipients
+
+---
+
+### FR-146 Future Configuration Expansion
+
+The configuration architecture shall support additional configuration sections without redesign.
+
+Future modules shall integrate naturally into the existing configuration system.
+
+---
+
+### FR-147 Configuration Integrity
+
+The configuration subsystem shall detect duplicate, deprecated, or unsupported configuration options.
+
+Warnings shall be reported through the logging system.
+
+---
+### FR-148 Research Profile
+
+The system shall support configurable research profiles.
+
+A research profile may define:
+
+- preferred arXiv categories
+- ranking preferences
+- AI prompt variants
+- translation preferences
+- report layout
+
+Different profiles shall allow the system to adapt to different research interests without modifying source code.
+
+---
+
+### FR-149 Scientific Glossary Configuration
+
+The scientific glossary shall be maintained as a configurable resource.
+
+Users shall be able to add, modify, or remove terminology entries without changing application code.
+
+Glossary updates shall automatically apply to future translations.
+
+---
+
+### FR-150 Configuration Reproducibility
+
+Given identical configuration files and environment variables,
+
+the application shall exhibit identical behavior when processing identical input data.
+
+Configuration shall therefore be considered part of the reproducibility requirements of the system.
+
+---
+## 3.11 Logging
+
+### FR-151 Logging Objective
+
+The logging subsystem shall provide sufficient information to monitor, diagnose, and reproduce system behavior.
+
+Logs shall support both routine operation and troubleshooting.
+
+---
+
+### FR-152 Logging Levels
+
+The system shall support at least the following logging levels:
+
+- DEBUG
+- INFO
+- WARNING
+- ERROR
+- CRITICAL
+
+Logging verbosity shall be configurable.
+
+---
+
+### FR-153 Module-Based Logging
+
+Each major subsystem shall produce identifiable log entries.
+
+Examples include:
+
+- paper retrieval
+- metadata processing
+- author analysis
+- ranking
+- AI analysis
+- translation
+- report generation
+- email delivery
+
+Module names shall appear in log records.
+
+---
+
+### FR-154 Execution Log
+
+Each execution shall generate an execution log containing:
+
+- start time
+- end time
+- execution duration
+- execution status
+
+Execution logs shall support historical review.
+
+---
+
+### FR-155 Error Logging
+
+Unexpected errors shall be recorded with sufficient diagnostic information.
+
+Logs should include:
+
+- error message
+- affected subsystem
+- execution stage
+- stack trace (when appropriate)
+
+Sensitive information shall not appear in error logs.
+
+---
+
+### FR-156 API Logging
+
+Interactions with external services shall be logged.
+
+Examples include:
+
+- arXiv requests
+- INSPIRE queries
+- AI requests
+- SMTP delivery
+
+Logs shall record request outcomes without exposing confidential information.
+
+---
+
+### FR-157 Ranking Decision Logging
+
+The ranking subsystem shall record why each selected paper was chosen.
+
+Ranking logs may include:
+
+- citation statistics
+- applied ranking strategy
+- calculated score
+- selection threshold
+
+Ranking decisions shall be reproducible.
+
+---
+
+### FR-158 AI Logging
+
+AI-related logs shall include:
+
+- provider
+- model
+- execution time
+- token usage
+- completion status
+
+Prompt contents shall not be logged unless explicitly enabled.
+
+---
+
+### FR-159 Configuration Logging
+
+The configuration version used during execution shall be recorded.
+
+Significant configuration changes shall be identifiable.
+
+---
+
+### FR-160 Log Rotation
+
+The logging subsystem shall support automatic log rotation.
+
+Retention policies shall be configurable.
+
+Old logs may be archived or removed automatically.
+
+---
+
+### FR-161 Audit Logging
+
+The system shall maintain an audit log recording important system events.
+
+Examples include:
+
+- report generation
+- report delivery
+- configuration changes
+- execution failures
+
+Audit logs shall remain separate from diagnostic logs.
+
+---
+
+### FR-162 Sensitive Information Protection
+
+Logs shall never expose confidential information.
+
+Examples include:
+
+- API keys
+- passwords
+- authentication tokens
+
+Sensitive values shall be masked whenever logging is necessary.
+
+---
+
+### FR-163 Future Logging Extensions
+
+The logging subsystem shall support future integrations including:
+
+- centralized logging
+- log aggregation
+- monitoring dashboards
+- alerting systems
+
+Future integrations shall not require redesigning the logging architecture.
+
+---
+### FR-164 Paper Decision Trace
+
+For every processed paper, the system shall record the outcome of the evaluation process.
+
+Possible outcomes include:
+
+- selected
+- filtered out
+- skipped
+- failed
+
+The reason for the outcome shall be recorded whenever practical.
+
+---
+
+### FR-165 Performance Logging
+
+The system shall record execution time for major processing stages.
+
+Examples include:
+
+- paper retrieval
+- author analysis
+- AI analysis
+- report generation
+- email delivery
+
+Performance information shall support optimization.
+
+---
+
+### FR-166 Reproducibility Support
+
+Logs shall contain sufficient information to reproduce the processing pipeline for a completed execution.
+
+Examples include:
+
+- execution identifier
+- configuration version
+- ranking version
+- AI model
+- prompt version
+
+Reproducibility information shall remain available for future analysis.
+
+---
+## 3.12 Cache Management
+
+### FR-167 Cache Objective
+
+The cache subsystem shall reduce unnecessary external requests while preserving correctness and reproducibility.
+
+Caching shall improve performance without changing application behavior.
+
+---
+
+### FR-168 Cache Scope
+
+The system shall support caching for reusable data.
+
+Examples include:
+
+- author profiles
+- citation statistics
+- AI analysis
+- translations
+- metadata
+- API responses
+
+Additional cache types may be added in future versions.
+
+---
+
+### FR-169 Cache Keys
+
+Every cached object shall have a unique cache key.
+
+Cache keys should be deterministic.
+
+Examples include:
+
+- arXiv identifier
+- author identifier
+- prompt version
+- AI model
+- configuration version
+
+---
+
+### FR-170 Cache Expiration
+
+Cache expiration policies shall be configurable.
+
+Different cache types may use different expiration periods.
+
+Expired cache entries shall be refreshed automatically.
+
+---
+
+### FR-171 Cache Validation
+
+Cached data shall be validated before reuse.
+
+Invalid or corrupted cache entries shall be discarded automatically.
+
+---
+
+### FR-172 Cache Consistency
+
+Cached data shall remain consistent with the associated configuration.
+
+If configuration changes invalidate cached results,
+
+the affected cache entries shall not be reused.
+
+---
+
+### FR-173 AI Cache
+
+Previously generated AI analyses may be reused when:
+
+- paper metadata is unchanged
+- prompt version is unchanged
+- AI model is unchanged
+- configuration is unchanged
+
+Otherwise, a new analysis shall be generated.
+
+---
+
+### FR-174 Translation Cache
+
+Previously translated scientific content may be reused when the source text remains unchanged.
+
+Changes to the glossary shall invalidate affected translation cache entries.
+
+---
+
+### FR-175 Author Cache
+
+Author information retrieved from citation databases may be cached.
+
+Cache duration shall be configurable.
+
+Updated author information shall replace expired cache entries.
+
+---
+
+### FR-176 Cache Statistics
+
+The system shall record cache statistics including:
+
+- cache hits
+- cache misses
+- cache refreshes
+- cache size
+
+Statistics shall support performance optimization.
+
+---
+
+### FR-177 Manual Cache Management
+
+Users shall be able to:
+
+- clear cache
+- rebuild cache
+- inspect cache status
+
+Manual cache operations shall not require source code modifications.
+
+---
+
+### FR-178 Future Cache Providers
+
+The cache subsystem shall support multiple storage backends.
+
+Examples include:
+
+- file system
+- SQLite
+- Redis
+
+Changing cache storage shall not require redesigning business logic.
+
+---
+### FR-179 Cache Reproducibility
+
+Cached results shall preserve sufficient metadata to support reproducibility.
+
+Examples include:
+
+- creation timestamp
+- provider
+- model version
+- prompt version
+- configuration version
+
+---
+
+### FR-180 Cache Isolation
+
+Different cache types shall remain independent.
+
+Invalidation of one cache shall not require clearing unrelated caches.
+
+---
+
+### FR-181 Selective Cache Refresh
+
+The system shall support refreshing individual cache entries without rebuilding the entire cache.
+
+Selective refresh shall be available for:
+
+- individual papers
+- individual authors
+- AI analyses
+- translations
+
+---
+
+### FR-182 Cache Safety
+
+Cache corruption shall never terminate the processing pipeline.
+
+When cache recovery is not possible,
+
+the system shall regenerate the affected data from its original source.
+
+---
+## 3.13 Scheduler
+
+### FR-183 Scheduler Objective
+
+The scheduler subsystem shall automatically execute the complete processing pipeline according to a configurable schedule.
+
+Automatic execution shall require no user intervention during normal operation.
+
+---
+
+### FR-184 Scheduled Execution
+
+The default schedule shall execute once per day.
+
+The execution time shall be configurable.
+
+Future versions may support multiple daily executions.
+
+---
+
+### FR-185 Manual Execution
+
+The system shall support manual execution.
+
+Manual execution shall perform the same workflow as scheduled execution.
+
+Manual execution shall be available for testing and debugging.
+
+---
+
+### FR-186 Execution Pipeline
+
+Each scheduled execution shall perform the complete workflow in the following order:
+
+1. Retrieve papers
+2. Process metadata
+3. Analyze authors
+4. Rank papers
+5. Generate AI analysis
+6. Translate content
+7. Generate report
+8. Deliver notifications
+
+The execution order shall remain configurable only when dependencies permit.
+
+---
+
+### FR-187 Execution Lock
+
+The scheduler shall prevent multiple executions of the same pipeline from running simultaneously.
+
+If an execution is already in progress,
+
+additional scheduled executions shall be skipped or delayed according to configuration.
+
+---
+
+### FR-188 Retry Policy
+
+If execution fails,
+
+the scheduler shall support configurable retry behavior.
+
+Retry configuration may include:
+
+- retry count
+- retry interval
+- retry strategy
+
+Retries shall be recorded in the execution log.
+
+---
+
+### FR-189 Execution Status
+
+The scheduler shall record the status of every execution.
+
+Possible execution states include:
+
+- scheduled
+- running
+- completed
+- failed
+- cancelled
+
+Execution history shall remain available for review.
+
+---
+
+### FR-190 Time Zone Support
+
+The scheduler shall support configurable time zones.
+
+Scheduled execution shall use the configured reference time zone consistently.
+
+---
+
+### FR-191 Platform Independence
+
+The scheduling subsystem shall remain independent of the underlying operating system.
+
+The application shall support integration with platform-specific schedulers including:
+
+- Windows Task Scheduler
+- cron
+- systemd timers
+
+---
+
+### FR-192 Graceful Shutdown
+
+If the application is terminated during execution,
+
+the scheduler shall record the interruption.
+
+Future executions shall continue normally.
+
+---
+
+### FR-193 Future Scheduling Features
+
+The scheduler architecture shall support future capabilities including:
+
+- multiple schedules
+- event-triggered execution
+- webhook-triggered execution
+- cloud scheduling services
+
+Future enhancements shall not require redesigning the scheduling subsystem.
+
+---
+### FR-194 Missed Execution Recovery
+
+If a scheduled execution is missed due to system downtime,
+
+the scheduler may perform a recovery execution according to configuration.
+
+Recovery behavior shall be configurable.
+
+---
+
+### FR-195 Execution Identifier
+
+Every scheduled execution shall receive a unique execution identifier.
+
+The execution identifier shall be used consistently throughout:
+
+- logs
+- reports
+- audit records
+- cache metadata
+
+---
+
+### FR-196 Pipeline Dependency
+
+A processing stage shall begin only after all required prerequisite stages have completed successfully.
+
+Dependent stages shall not execute using incomplete input data.
+
+---
+
+### FR-197 Scheduler Diagnostics
+
+The scheduler shall expose diagnostic information including:
+
+- next scheduled execution
+- previous execution
+- scheduler status
+- pending retries
+
+Diagnostic information shall assist operational monitoring.
+
+---
