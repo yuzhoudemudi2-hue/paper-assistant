@@ -2389,3 +2389,1510 @@ Prefer the approach that:
 The long-term maintainability of the project is more important than short-term implementation speed.
 
 ---
+# 15. Performance and Scalability
+
+Paper Assistant should remain responsive and maintainable as the amount of data, supported services, and system complexity increase.
+
+Performance optimization should never sacrifice correctness or maintainability.
+
+---
+
+## 15.1 Performance Philosophy
+
+Correctness has higher priority than performance.
+
+Readability has higher priority than micro-optimization.
+
+Optimization should be based on measurement rather than assumptions.
+
+---
+
+## 15.2 Avoid Premature Optimization
+
+Do not optimize code before identifying actual performance bottlenecks.
+
+Keep implementations simple until profiling demonstrates a need for optimization.
+
+---
+
+## 15.3 Caching Strategy
+
+Frequently reused data should be cached whenever appropriate.
+
+Examples include:
+
+- Author profiles
+- Citation statistics
+- AI summaries
+- Translation results
+- Downloaded metadata
+
+Cache expiration policies should be configurable.
+
+---
+
+## 15.4 Concurrent Processing
+
+Independent tasks may execute concurrently.
+
+Examples include:
+
+- Downloading metadata for multiple papers
+- Querying multiple authors
+- Translating independent papers
+- AI analysis of unrelated papers
+
+Concurrency should not compromise reproducibility.
+
+---
+
+## 15.5 Resource Management
+
+Network connections, file handles, and database connections must always be released properly.
+
+Use context managers whenever practical.
+
+Avoid resource leaks.
+
+---
+
+## 15.6 Large Dataset Support
+
+Algorithms should scale efficiently.
+
+Avoid unnecessary repeated scans of large collections.
+
+Prefer efficient lookup structures where appropriate.
+
+---
+
+## 15.7 Incremental Processing
+
+Only newly discovered papers should require full processing.
+
+Previously processed papers should be reused whenever possible.
+
+Avoid repeating expensive operations.
+
+---
+
+## 15.8 Memory Usage
+
+Avoid loading unnecessary data into memory.
+
+Process large collections incrementally whenever practical.
+
+Memory usage should remain predictable.
+
+---
+
+## 15.9 AI Cost Optimization
+
+Avoid duplicate AI requests.
+
+Reuse cached AI analyses whenever valid.
+
+Only invoke AI when deterministic processing cannot achieve the required result.
+
+---
+
+## 15.10 Future Scalability
+
+The architecture should support future expansion including:
+
+- Additional arXiv categories
+- Additional AI providers
+- Additional report formats
+- Additional citation databases
+- Multiple user accounts
+
+Future expansion should require minimal architectural changes.
+
+---
+
+## 15.11 Monitoring
+
+Performance metrics should be measurable.
+
+Examples include:
+
+- Total execution time
+- API response time
+- AI response time
+- Cache hit rate
+- Number of processed papers
+
+Performance data should support future optimization decisions.
+
+---
+
+## 15.12 Decision Matrix for Codex
+
+When multiple implementations are possible, prioritize them in the following order:
+
+1. Correctness
+2. Scientific reliability
+3. Maintainability
+4. Readability
+5. Testability
+6. Extensibility
+7. Performance
+
+Never sacrifice a higher-priority objective for a lower-priority one without explicit justification.
+
+---
+# 16. Security Standards
+
+Security is an integral part of Paper Assistant.
+
+Every component should be designed with the principle of least privilege and secure-by-default behavior.
+
+Security should never be sacrificed for convenience.
+
+---
+
+## 16.1 Secret Management
+
+Sensitive information must never be stored in source code.
+
+Examples include:
+
+- API keys
+- Passwords
+- SMTP credentials
+- Authentication tokens
+
+Secrets should be loaded from environment variables or secure configuration.
+
+---
+
+## 16.2 Repository Security
+
+The Git repository must never contain:
+
+- API keys
+- Passwords
+- Personal credentials
+- Generated secret files
+
+Sensitive files should be excluded using `.gitignore`.
+
+---
+
+## 16.3 Access Control
+
+Components should access only the resources required for their responsibilities.
+
+Avoid unnecessary file system or network permissions.
+
+Follow the principle of least privilege.
+
+---
+
+## 16.4 Secure Logging
+
+Logs must never expose sensitive information.
+
+Mask confidential values whenever logging is required.
+
+Example:
+
+```
+OPENAI_API_KEY = sk-************************
+```
+
+Do not record complete credentials.
+
+---
+
+## 16.5 Input Validation
+
+All external input should be validated before processing.
+
+Examples include:
+
+- Configuration files
+- API responses
+- User input
+- File paths
+- Email addresses
+
+Reject invalid input with clear error messages.
+
+---
+
+## 16.6 Prompt Injection Protection
+
+AI-generated content must never be treated as executable instructions.
+
+Paper titles, abstracts, and metadata should always be considered untrusted input.
+
+Prompt templates should clearly separate:
+
+- system instructions
+- user content
+- external data
+
+---
+
+## 16.7 File Security
+
+Generated reports, cache files, and databases should use appropriate file permissions.
+
+Temporary files should be removed after use whenever practical.
+
+Avoid leaving sensitive intermediate files.
+
+---
+
+## 16.8 Dependency Security
+
+Dependencies should be reviewed regularly for known vulnerabilities.
+
+Avoid unmaintained libraries.
+
+Upgrade vulnerable packages promptly after verifying compatibility.
+
+---
+
+## 16.9 HTML Report Safety
+
+Generated HTML reports should properly escape dynamic content.
+
+Do not insert untrusted HTML directly into reports.
+
+Prevent accidental script execution.
+
+---
+
+## 16.10 Backup and Recovery
+
+Important project data should support backup and recovery.
+
+Examples include:
+
+- Configuration
+- Cache databases
+- Translation cache
+- AI summaries
+
+Recovery procedures should be documented.
+
+---
+
+## 16.11 Error Disclosure
+
+User-facing error messages should provide useful guidance without exposing internal implementation details.
+
+Detailed debugging information belongs in log files rather than user interfaces.
+
+---
+
+## 16.12 Decision Rules for Codex
+
+Whenever security conflicts with convenience:
+
+Prefer the more secure implementation.
+
+Whenever uncertain whether information is sensitive:
+
+Treat it as sensitive.
+
+Never expose secrets, credentials, or internal implementation details unless explicitly required for debugging in a secure environment.
+
+---
+# 17. Deployment and Operations
+
+Paper Assistant should be easy to deploy, operate, monitor, and maintain across supported environments.
+
+Deployment procedures should be repeatable, documented, and require minimal manual intervention.
+
+---
+
+## 17.1 Supported Platforms
+
+Paper Assistant should support:
+
+- Windows 11
+- Linux
+
+All core functionality should behave consistently across supported platforms.
+
+Platform-specific code should be isolated whenever practical.
+
+---
+
+## 17.2 Deployment Structure
+
+A production deployment should contain separate directories for:
+
+- Configuration
+- Logs
+- Cache
+- Reports
+- Database
+- Temporary files
+
+Generated files should never overwrite source code.
+
+---
+
+## 17.3 Environment Preparation
+
+Before deployment, verify:
+
+- Python version
+- Dependency installation
+- Configuration validity
+- Environment variables
+- Directory permissions
+- Network connectivity
+
+Deployment should fail early if required prerequisites are missing.
+
+---
+
+## 17.4 Scheduled Execution
+
+Daily execution should be managed by the operating system scheduler.
+
+Examples include:
+
+- Windows Task Scheduler
+- Linux cron
+- systemd timers
+
+Scheduling logic should not be hardcoded inside the application.
+
+---
+
+## 17.5 Health Checks
+
+The application should provide a lightweight health check.
+
+The health check may verify:
+
+- Configuration loading
+- Database availability
+- Cache availability
+- Network connectivity
+- AI provider availability
+
+Health checks should complete quickly.
+
+---
+
+## 17.6 Backup Strategy
+
+Important data should be backed up regularly.
+
+Examples include:
+
+- Configuration files
+- Cache databases
+- Translation cache
+- Generated reports
+
+Backup procedures should be documented.
+
+---
+
+## 17.7 Recovery Strategy
+
+Recovery procedures should support:
+
+- Configuration restoration
+- Cache rebuilding
+- Report regeneration
+- Log preservation
+
+Recovery should minimize data loss.
+
+---
+
+## 17.8 Monitoring
+
+Operational monitoring should include:
+
+- Daily execution status
+- Execution duration
+- Failed modules
+- API failures
+- Email delivery status
+
+Operational issues should be detectable without reading source code.
+
+---
+
+## 17.9 Upgrade Procedure
+
+Software upgrades should:
+
+- preserve user configuration
+- preserve cached data whenever practical
+- preserve historical reports
+- document breaking changes
+
+Upgrades should be reversible.
+
+---
+
+## 17.10 Disaster Recovery
+
+Unexpected failures should not permanently interrupt the daily workflow.
+
+Recovery procedures should allow the next scheduled execution to continue normally after the underlying issue has been resolved.
+
+---
+
+## 17.11 Decision Rules for Codex
+
+Whenever multiple deployment strategies are possible:
+
+Prefer the one that:
+
+- minimizes manual maintenance
+- preserves user data
+- supports rollback
+- simplifies troubleshooting
+- remains compatible across supported platforms
+
+Operational stability is more important than deployment convenience.
+
+---
+# 18. Project-Specific Architecture
+
+This chapter defines the long-term architecture of Paper Assistant.
+
+All future development should preserve the architectural principles described below.
+
+Architecture changes should be deliberate, documented, and backward compatible whenever practical.
+
+---
+
+## 18.1 System Architecture
+
+Paper Assistant follows a modular pipeline architecture.
+
+The overall workflow is:
+
+Fetch Papers
+↓
+
+Collect Metadata
+↓
+
+Analyze Authors
+↓
+
+Rank Papers
+↓
+
+AI Analysis
+↓
+
+Generate Report
+↓
+
+Deliver Email
+
+Each stage should have a single responsibility.
+
+---
+
+## 18.2 Core Pipeline
+
+The daily workflow should follow this order:
+
+1. Fetch newly submitted papers from arXiv.
+2. Parse metadata.
+3. Query author information from INSPIRE.
+4. Calculate ranking metrics.
+5. Identify high-priority papers.
+6. Perform AI analysis.
+7. Translate title and abstract.
+8. Generate reports.
+9. Send emails.
+10. Archive execution results.
+
+Each step should be independently testable.
+
+---
+
+## 18.3 Module Responsibilities
+
+Each module should have one clearly defined responsibility.
+
+Examples:
+
+arxiv/
+
+Download papers only.
+
+inspire/
+
+Collect citation and author information only.
+
+ranking/
+
+Evaluate paper priority only.
+
+ai/
+
+Perform AI-related analysis only.
+
+translation/
+
+Translate scientific text only.
+
+report/
+
+Generate HTML and PDF reports only.
+
+email/
+
+Send reports only.
+
+scheduler/
+
+Coordinate execution only.
+
+No module should perform unrelated responsibilities.
+
+---
+
+## 18.4 Data Flow
+
+Scientific data should move in one direction through the pipeline.
+
+Raw Paper
+
+↓
+
+Metadata
+
+↓
+
+Citation Information
+
+↓
+
+Ranking Result
+
+↓
+
+AI Analysis
+
+↓
+
+Translation
+
+↓
+
+Report
+
+↓
+
+Email
+
+Avoid circular dependencies.
+
+---
+
+## 18.5 Data Models
+
+All important entities should have explicit data models.
+
+Examples include:
+
+- Paper
+- Author
+- AuthorProfile
+- CitationStatistics
+- AnalysisResult
+- TranslationResult
+- DailyReport
+
+Business logic should exchange structured objects rather than dictionaries whenever practical.
+
+---
+
+## 18.6 Plugin Architecture
+
+Future extensions should be implemented as plugins whenever possible.
+
+Examples include:
+
+- New AI providers
+- New citation databases
+- New report formats
+- New translation engines
+- New notification channels
+
+Core architecture should require minimal modification when adding plugins.
+
+---
+
+## 18.7 Configuration-Driven Behavior
+
+Business rules should be configurable.
+
+Examples include:
+
+- Citation thresholds
+- Ranking weights
+- AI provider
+- Translation provider
+- Report language
+- Email recipients
+
+Behavior should change through configuration rather than source code modifications.
+
+---
+
+## 18.8 Reproducibility
+
+Scientific analyses should be reproducible.
+
+Whenever practical, store:
+
+- Configuration version
+- Prompt version
+- AI model
+- Analysis timestamp
+
+Future users should be able to reproduce previous reports.
+
+---
+
+## 18.9 Future Expansion
+
+The architecture should support future capabilities including:
+
+- Additional arXiv categories
+- Multiple daily schedules
+- Multiple users
+- Web dashboard
+- REST API
+- Database storage
+- PDF reports
+- Mobile notifications
+
+Future expansion should not require redesigning the core architecture.
+
+---
+
+## 18.10 Decision Rules for Codex
+
+Whenever multiple architectural designs are possible:
+
+Prefer the design that:
+
+- keeps modules independent
+- minimizes coupling
+- maximizes cohesion
+- supports testing
+- supports future expansion
+- preserves scientific reproducibility
+
+Short-term convenience must never compromise the long-term architecture of Paper Assistant.
+
+---
+# Appendix A. Recommended Technology Stack
+
+This appendix defines the recommended technology stack for Paper Assistant.
+
+The technologies listed below represent the preferred implementation choices.
+
+Alternative technologies should only be introduced with clear justification.
+
+---
+
+## A.1 Programming Language
+
+Python 3.13+
+
+Python should be the only supported programming language for the core application.
+
+---
+
+## A.2 Package Management
+
+Use:
+
+- uv
+
+Do not mix multiple dependency management systems.
+
+---
+
+## A.3 HTTP Client
+
+Preferred library:
+
+- httpx
+
+Reason:
+
+- modern API
+- async support
+- HTTP/2 support
+- excellent reliability
+
+---
+
+## A.4 Configuration
+
+Preferred libraries:
+
+- pydantic
+- PyYAML
+
+Configuration files should use YAML.
+
+---
+
+## A.5 HTML Templates
+
+Preferred library:
+
+- Jinja2
+
+Templates should remain independent from business logic.
+
+---
+
+## A.6 Retry Strategy
+
+Preferred library:
+
+- tenacity
+
+Retry policies should be centralized and configurable.
+
+---
+
+## A.7 Data Models
+
+Preferred library:
+
+- Pydantic
+
+Business data should use typed models.
+
+Avoid raw dictionaries whenever practical.
+
+---
+
+## A.8 Database
+
+Current recommendation:
+
+SQLite
+
+Future support:
+
+- PostgreSQL
+
+Database access should remain abstracted.
+
+---
+
+## A.9 Testing
+
+Preferred tools:
+
+- pytest
+- pytest-cov
+- pytest-mock
+
+Testing should remain fully automated.
+
+---
+
+## A.10 Code Quality
+
+Preferred tools:
+
+- Ruff
+- Black
+
+Formatting and linting should be automated.
+
+---
+
+## A.11 Type Checking
+
+Preferred tool:
+
+- Pyright
+
+Type checking should be performed before release.
+
+---
+
+## A.12 Documentation
+
+Preferred format:
+
+Markdown
+
+API documentation should be generated automatically whenever practical.
+
+---
+
+## A.13 Scheduling
+
+Preferred solutions:
+
+Windows:
+
+- Task Scheduler
+
+Linux:
+
+- cron
+- systemd timers
+
+Scheduling should remain external to the application.
+
+---
+
+## A.14 AI Providers
+
+The architecture should support multiple providers including:
+
+- OpenAI
+- Anthropic
+- Google Gemini
+- DeepSeek
+
+Providers should be interchangeable through a common interface.
+
+---
+
+## A.15 Report Generation
+
+Preferred formats:
+
+- HTML
+- PDF (optional)
+
+HTML should be considered the primary report format.
+
+---
+
+## A.16 Email
+
+Preferred protocol:
+
+SMTP
+
+Email implementation should support:
+
+- multiple recipients
+- HTML email
+- attachments
+
+---
+
+## A.17 Future Dashboard
+
+Recommended framework:
+
+- FastAPI
+- HTMX
+- Alpine.js
+
+The dashboard should remain independent of the core pipeline.
+
+---
+
+## A.18 Decision Rules for Codex
+
+When selecting technologies:
+
+Prefer mature, actively maintained, and widely adopted solutions.
+
+Avoid introducing experimental technologies into the core architecture unless there is a compelling long-term benefit.
+
+Technology choices should prioritize reliability, maintainability, portability, and scientific reproducibility.
+
+---
+# Appendix B. Complete Directory Layout
+
+This appendix defines the recommended project directory structure.
+
+Every source file should have a clear and predictable location.
+
+Directories should represent responsibilities rather than implementation details.
+
+---
+
+## B.1 Root Directory
+
+The project root should contain only high-level files and directories.
+
+Recommended layout:
+
+```
+paper-assistant/
+├── config/
+├── docs/
+├── prompts/
+├── reports/
+├── cache/
+├── logs/
+├── scripts/
+├── src/
+├── templates/
+├── tests/
+├── pyproject.toml
+├── uv.lock
+├── README.md
+└── LICENSE
+```
+
+---
+
+## B.2 Source Directory
+
+The src directory contains all application source code.
+
+Recommended structure:
+
+```
+src/
+├── ai/
+├── arxiv/
+├── inspire/
+├── ranking/
+├── translation/
+├── report/
+├── email/
+├── scheduler/
+├── config/
+├── database/
+├── cache/
+├── models/
+├── utils/
+└── main.py
+```
+
+Each directory should contain one major subsystem.
+
+---
+
+## B.3 Configuration Directory
+
+The config directory stores all configuration files.
+
+Examples:
+
+- config.yaml
+- ai.yaml
+- email.yaml
+- logging.yaml
+- ranking.yaml
+- scheduler.yaml
+
+Configuration files should not contain source code.
+
+---
+
+## B.4 Prompt Directory
+
+The prompts directory stores AI prompt templates.
+
+Examples:
+
+- summary_prompt.md
+- translation_prompt.md
+- ranking_prompt.md
+
+Prompt files should be version-controlled.
+
+---
+
+## B.5 Templates Directory
+
+The templates directory stores presentation templates.
+
+Examples:
+
+- report.html
+- email.html
+
+Templates should not contain business logic.
+
+---
+
+## B.6 Reports Directory
+
+Generated reports should be stored under reports/.
+
+Recommended organization:
+
+```
+reports/
+└── 2026/
+    └── 07/
+        └── report_2026-07-07.html
+```
+
+Historical reports should remain available.
+
+---
+
+## B.7 Cache Directory
+
+Temporary reusable data should be stored under cache/.
+
+Examples include:
+
+- citation cache
+- translation cache
+- AI cache
+
+The application should be able to rebuild cache data when necessary.
+
+---
+
+## B.8 Logs Directory
+
+All log files should be stored under logs/.
+
+Examples:
+
+- application.log
+- arxiv.log
+- inspire.log
+- ai.log
+
+Logs should never be mixed with reports.
+
+---
+
+## B.9 Tests Directory
+
+The tests directory should mirror the src directory.
+
+Example:
+
+```
+src/arxiv/fetcher.py
+
+↓
+
+tests/arxiv/test_fetcher.py
+```
+
+Test organization should remain consistent throughout the project.
+
+---
+
+## B.10 Scripts Directory
+
+The scripts directory stores development and maintenance scripts.
+
+Examples:
+
+- initialize_project.py
+- migrate_database.py
+- clean_cache.py
+
+Scripts should not contain core business logic.
+
+---
+
+## B.11 Documentation Directory
+
+The docs directory stores project documentation.
+
+Examples:
+
+- 00_Codex_Instructions.md
+- Architecture.md
+- API.md
+- User_Guide.md
+
+Documentation should remain synchronized with implementation.
+
+---
+
+## B.12 Decision Rules for Codex
+
+Whenever creating a new file:
+
+- place it inside the most appropriate existing directory
+- avoid creating new top-level directories unless necessary
+- preserve the established project structure
+- group related functionality together
+
+Project organization should remain simple, predictable, and scalable.
+
+---
+# Appendix C. Codex Development Checklist
+
+This appendix defines the mandatory checklist that Codex should follow before considering any development task complete.
+
+Every completed task should satisfy all applicable checklist items.
+
+---
+
+## C.1 Architecture
+
+□ The implementation follows the project architecture.
+
+□ Module responsibilities remain clear.
+
+□ No unnecessary coupling has been introduced.
+
+□ Existing architecture has been preserved.
+
+---
+
+## C.2 Code Quality
+
+□ Naming follows project conventions.
+
+□ Functions remain small and focused.
+
+□ Classes have a single responsibility.
+
+□ Code is readable and maintainable.
+
+□ No duplicated logic has been introduced.
+
+---
+
+## C.3 Configuration
+
+□ New configurable values are stored in configuration files.
+
+□ No hardcoded secrets exist.
+
+□ Configuration has been documented.
+
+---
+
+## C.4 Error Handling
+
+□ Exceptions are handled appropriately.
+
+□ Retry logic is implemented where necessary.
+
+□ Error messages are meaningful.
+
+□ Partial failures do not terminate unrelated tasks.
+
+---
+
+## C.5 Logging
+
+□ Important operations are logged.
+
+□ Errors are logged.
+
+□ Sensitive information is masked.
+
+□ Performance-critical operations are measurable.
+
+---
+
+## C.6 AI Integration
+
+□ Prompt files are updated if necessary.
+
+□ Prompt version has been considered.
+
+□ AI output is validated.
+
+□ Scientific facts are not fabricated.
+
+□ AI results remain reproducible.
+
+---
+
+## C.7 External APIs
+
+□ API responses are validated.
+
+□ Rate limits are respected.
+
+□ Timeouts are configured.
+
+□ Retry policies are implemented.
+
+□ Frequently reused data is cached.
+
+---
+
+## C.8 Testing
+
+□ Unit tests have been added.
+
+□ Existing tests still pass.
+
+□ New edge cases are covered.
+
+□ Regression tests have been added when fixing bugs.
+
+---
+
+## C.9 Documentation
+
+□ Documentation has been updated.
+
+□ Public interfaces are documented.
+
+□ README changes have been made if necessary.
+
+□ Architecture documentation remains accurate.
+
+---
+
+## C.10 Security
+
+□ Secrets are protected.
+
+□ Logs contain no confidential information.
+
+□ External input is validated.
+
+□ Dependencies introduce no unnecessary security risk.
+
+---
+
+## C.11 Performance
+
+□ No unnecessary API requests exist.
+
+□ Expensive computations are minimized.
+
+□ Caching is used where appropriate.
+
+□ Resource cleanup is implemented.
+
+---
+
+## C.12 Git Workflow
+
+□ Only related files were modified.
+
+□ Commit size remains reasonable.
+
+□ Commit message is descriptive.
+
+□ The project remains in a runnable state.
+
+---
+
+## C.13 Final Review
+
+Before completing any task, Codex should verify:
+
+□ The implementation satisfies the original requirements.
+
+□ Existing functionality has not been broken.
+
+□ The implementation is maintainable.
+
+□ The implementation is testable.
+
+□ The implementation is extensible.
+
+□ The implementation follows this entire document.
+
+Only after completing this checklist should a development task be considered finished.
+
+---
+# Appendix D. Long-Term Development Roadmap
+
+This appendix defines the long-term vision for Paper Assistant.
+
+The roadmap serves as a planning reference rather than a strict implementation schedule.
+
+Future development should remain aligned with the architectural principles defined in this document.
+
+---
+
+## D.1 Development Philosophy
+
+Paper Assistant should evolve through small, stable, and incremental improvements.
+
+Each development phase should produce a fully functional and usable system.
+
+Avoid introducing future features before the current phase is complete and stable.
+
+---
+
+## D.2 Phase 1 — Minimum Viable Product (MVP)
+
+Primary objective:
+
+Deliver a stable daily paper assistant.
+
+Core features include:
+
+- Daily retrieval of newly submitted papers from arXiv.
+- Author citation lookup through INSPIRE.
+- Paper ranking based on configurable rules.
+- AI-assisted paper summaries.
+- Chinese translation of titles and abstracts.
+- HTML daily report generation.
+- Email delivery.
+- Logging.
+- Configuration management.
+- Automated testing.
+
+Completion criteria:
+
+A fully automated daily workflow requiring no manual intervention.
+
+---
+
+## D.3 Phase 2 — Enhanced Scientific Analysis
+
+Primary objective:
+
+Improve the quality and usefulness of scientific analysis.
+
+Potential features include:
+
+- Multiple AI providers.
+- Hot topic detection.
+- Research trend analysis.
+- Author impact analysis.
+- Institution analysis.
+- Collaboration network analysis.
+- Citation trend visualization.
+- Better multilingual translation.
+
+Completion criteria:
+
+Reports provide deeper scientific insight beyond basic summaries.
+
+---
+
+## D.4 Phase 3 — User Experience
+
+Primary objective:
+
+Improve usability.
+
+Potential features include:
+
+- Interactive dashboard.
+- Historical report browser.
+- Search functionality.
+- Filtering.
+- Statistics.
+- Charts.
+- User preferences.
+- Dark mode.
+
+Completion criteria:
+
+Users can conveniently explore historical data without reading raw reports.
+
+---
+
+## D.5 Phase 4 — Scientific Platform
+
+Primary objective:
+
+Expand supported scientific resources.
+
+Potential integrations include:
+
+- OpenAlex
+- Semantic Scholar
+- Crossref
+- ORCID
+
+Potential capabilities include:
+
+- BibTeX export.
+- PDF parsing.
+- Full-text indexing.
+- Citation graph generation.
+
+Completion criteria:
+
+Paper Assistant becomes a comprehensive scientific literature platform.
+
+---
+
+## D.6 Phase 5 — Multi-User Support
+
+Primary objective:
+
+Support multiple independent users.
+
+Potential features include:
+
+- User accounts.
+- Individual configuration.
+- Independent report schedules.
+- Personal AI settings.
+- User-specific ranking rules.
+- Shared administration.
+
+Completion criteria:
+
+Multiple researchers can use one deployment simultaneously.
+
+---
+
+## D.7 Phase 6 — Intelligent Research Assistant
+
+Primary objective:
+
+Transform Paper Assistant into an AI-powered research assistant.
+
+Potential capabilities include:
+
+- Personalized paper recommendations.
+- Automatic research direction tracking.
+- Literature review generation.
+- Research timeline construction.
+- Research opportunity discovery.
+- AI-assisted project planning.
+- Interactive scientific question answering.
+
+Completion criteria:
+
+Paper Assistant actively assists scientific research rather than only delivering reports.
+
+---
+
+## D.8 Long-Term Goals
+
+Paper Assistant should eventually become:
+
+- Reliable
+- Reproducible
+- Extensible
+- Scientifically rigorous
+- AI-assisted
+- Community friendly
+- Open for future research collaboration
+
+The project should remain useful for many years without requiring major architectural redesign.
+
+---
+
+## D.9 Decision Rules for Codex
+
+Whenever implementing new functionality:
+
+Determine whether the feature belongs to the current development phase.
+
+Do not implement features intended for future phases unless explicitly requested.
+
+Always prioritize completing and stabilizing the current phase before expanding the project scope.
+
+Long-term architectural consistency is more important than rapid feature accumulation.
+
+---
