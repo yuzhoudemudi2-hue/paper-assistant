@@ -1,0 +1,4 @@
+filters:
+  citation_threshold: 5000
+  top_paper_threshold: 500
+  hot_score_threshold: 0.75

@@ -1,0 +1,5 @@
+scheduler:
+  enabled: false
+  timezone: Asia/Shanghai
+  run_time: "12:00"
+  prevent_duplicate_runs: true

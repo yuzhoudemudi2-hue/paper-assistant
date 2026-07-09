@@ -1,0 +1,8 @@
+email:
+  enabled: false
+  smtp_host: ""
+  smtp_port: 587
+  use_tls: true
+  sender: ""
+  recipients: []
+  retry_count: 3

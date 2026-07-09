@@ -1,0 +1,10 @@
+application:
+  name: Paper Assistant
+  environment: development
+  timezone: Asia/Shanghai
+
+paths:
+  cache_dir: cache
+  logs_dir: logs
+  reports_dir: reports
+  prompts_dir: prompts
